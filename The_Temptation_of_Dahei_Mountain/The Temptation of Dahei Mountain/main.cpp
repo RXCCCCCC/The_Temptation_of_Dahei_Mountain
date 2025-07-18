@@ -1,25 +1,25 @@
-// ´óºÚÉ½µÄÓÕ»ó
-// °üº¬Í¼ĞÎ¿â¡¢Windows API¡¢¶àÃ½ÌåµÈÍ·ÎÄ¼ş
+// å¤§é»‘å±±çš„è¯±æƒ‘
+// åŒ…å«å›¾å½¢åº“ã€Windows APIã€å¤šåª’ä½“ç­‰å¤´æ–‡ä»¶
 #include <windows.h>
-#include <graphics.h>    // EasyXÍ¼ĞÎ¿â£¬ÓÃÓÚ»æÍ¼
-#include <mmsystem.h>    // ¶àÃ½Ìå½Ó¿Ú£¬ÓÃÓÚ²¥·ÅÒôÀÖ
-#include <vector>        // ¶¯Ì¬Êı×é£¬´æ´¢¿óÊ¯¶ÔÏó
+#include <graphics.h>    // EasyXå›¾å½¢åº“ï¼Œç”¨äºç»˜å›¾
+#include <mmsystem.h>    // å¤šåª’ä½“æ¥å£ï¼Œç”¨äºæ’­æ”¾éŸ³ä¹
+#include <vector>        // åŠ¨æ€æ•°ç»„ï¼Œå­˜å‚¨çŸ¿çŸ³å¯¹è±¡
 #include <string>
-#include <cmath>         // ÊıÑ§º¯Êı£¬ÓÃÓÚ¼ÆËã¾àÀë¡¢½Ç¶È
-#include <ctime>         // Ê±¼äº¯Êı£¬ÓÃÓÚËæ»úÊıÖÖ×Ó
+#include <cmath>         // æ•°å­¦å‡½æ•°ï¼Œç”¨äºè®¡ç®—è·ç¦»ã€è§’åº¦
+#include <ctime>         // æ—¶é—´å‡½æ•°ï¼Œç”¨äºéšæœºæ•°ç§å­
 #include <memory> 
-#pragma comment(lib, "MSIMG32.LIB")  // Á´½ÓÍ¸Ã÷»æÖÆËùĞèµÄ¿â
-#pragma comment(lib, "Winmm.LIB")    // Á´½Ó¶àÃ½Ìå¿â
+#pragma comment(lib, "MSIMG32.LIB")  // é“¾æ¥é€æ˜ç»˜åˆ¶æ‰€éœ€çš„åº“
+#pragma comment(lib, "Winmm.LIB")    // é“¾æ¥å¤šåª’ä½“åº“
 using namespace std;
 
-// ´°¿Ú³£Á¿¶¨Òå
-const int WIN_WIDTH = 1080;    // ´°¿Ú¿í¶È
-const int WIN_HEIGHT = 640;    // ´°¿Ú¸ß¶È
-const int GAME_FRAME = 60;     // ÓÎÏ·Ö¡ÂÊ£¨Ã¿Ãë60Ö¡£©
-const int MAX_ANGLE = 80;      // ¹³×Ó×î´ó°Ú¶¯½Ç¶È£¨¶È£©
+// çª—å£å¸¸é‡å®šä¹‰
+const int WIN_WIDTH = 1080;    // çª—å£å®½åº¦
+const int WIN_HEIGHT = 640;    // çª—å£é«˜åº¦
+const int GAME_FRAME = 60;     // æ¸¸æˆå¸§ç‡ï¼ˆæ¯ç§’60å¸§ï¼‰
+const int MAX_ANGLE = 80;      // é’©å­æœ€å¤§æ‘†åŠ¨è§’åº¦ï¼ˆåº¦ï¼‰
 class GameState {
 public:
-    // ÓÎÏ·Á÷³Ì×´Ì¬
+    // æ¸¸æˆæµç¨‹çŠ¶æ€
     bool isInMenu = true;
     bool gameOver = false;
     bool showReturnBtn = false;
@@ -27,14 +27,14 @@ public:
     bool isPlayingCutScene = false;
     bool isRunning = true;
 
-    // ±³¾°ÒôÀÖ×´Ì¬
+    // èƒŒæ™¯éŸ³ä¹çŠ¶æ€
     bool isMenuBGMPlaying = false;
     bool isInstructionBGMPlaying = false;
     bool isLaunchBGMPlaying = false;
     bool isPullBGMPlaying = false;
     bool isTimeupBGMPlaying = false;
 
-    // ²Ëµ¥Óë³É¾ÍÏà¹Ø
+    // èœå•ä¸æˆå°±ç›¸å…³
     bool achieve_first = false;
     bool achieve_screw = false;
     bool achieve_bomb = false;
@@ -44,7 +44,7 @@ public:
     bool gotNewAchievement = false;
     int lastAchieveCount = 0;
 
-    // ÓÎÏ·Êı¾İ
+    // æ¸¸æˆæ•°æ®
     int tempHighScore = 0;
     int totalScore = 0;
     int gameTime = 40;
@@ -54,335 +54,335 @@ public:
     int levelTimes[5] = { 40, 50, 60, 50, 40 };
     int baseScoreReduction = 0;
 
-    // µ¥ÀıÄ£Ê½ÊµÏÖ
+    // å•ä¾‹æ¨¡å¼å®ç°
     static GameState& Instance() {
         static GameState instance;
         return instance;
     }
 
 private:
-    GameState() = default;  // Ë½ÓĞ¹¹Ôìº¯Êı£¬È·±£µ¥Àı
+    GameState() = default;  // ç§æœ‰æ„é€ å‡½æ•°ï¼Œç¡®ä¿å•ä¾‹
     GameState(const GameState&) = delete;
     GameState& operator=(const GameState&) = delete;
 };
 
-// °´Å¥Î»ÖÃ£¨¾ØĞÎÇøÓò£©
-RECT returnBtn{ 440, 400, 640, 460 }; // ·µ»Ø°´Å¥Î»ÖÃ£¨¾ÓÖĞ£©
+// æŒ‰é’®ä½ç½®ï¼ˆçŸ©å½¢åŒºåŸŸï¼‰
+RECT returnBtn{ 440, 400, 640, 460 }; // è¿”å›æŒ‰é’®ä½ç½®ï¼ˆå±…ä¸­ï¼‰
 
-// Í¼Æ¬×ÊÔ´£¨È«¾ÖÉùÃ÷£¬ºóĞø¼ÓÔØ£©
+// å›¾ç‰‡èµ„æºï¼ˆå…¨å±€å£°æ˜ï¼Œåç»­åŠ è½½ï¼‰
 IMAGE menuBG, mineBG, instructionBG, cutSceneImg, achieveBG, qiuxiaoshiImg, marryNewImg;
 IMAGE hookImg, catchImg, goldImg, rockImg, diamondImg, screwImg, bombImg, coalImg, ironImg;
 IMAGE ending1, ending2, ending3, achieve_first_img, achieve_screw_img, achieve_bomb_img,
 achieve_underdev_img, achieve_perfectdev_img, achieve_overdev_img, lockedImg;
 
 /**
- * Í¸Ã÷»æÖÆÍ¼Æ¬
- * @param x »æÖÆÎ»ÖÃx×ø±ê
- * @param y »æÖÆÎ»ÖÃy×ø±ê
- * @param img Òª»æÖÆµÄÍ¼Æ¬
- * ¹¦ÄÜ£ºÊ¹ÓÃAlphaBlendÊµÏÖÍ¼Æ¬µÄÍ¸Ã÷Ğ§¹û£¬±ÜÃâ±³¾°ÕÚµ²
+ * é€æ˜ç»˜åˆ¶å›¾ç‰‡
+ * @param x ç»˜åˆ¶ä½ç½®xåæ ‡
+ * @param y ç»˜åˆ¶ä½ç½®yåæ ‡
+ * @param img è¦ç»˜åˆ¶çš„å›¾ç‰‡
+ * åŠŸèƒ½ï¼šä½¿ç”¨AlphaBlendå®ç°å›¾ç‰‡çš„é€æ˜æ•ˆæœï¼Œé¿å…èƒŒæ™¯é®æŒ¡
  */
 void putimage_alpha(int x, int y, IMAGE* img) {
-    int w = img->getwidth();   // »ñÈ¡Í¼Æ¬¿í¶È
-    int h = img->getheight();  // »ñÈ¡Í¼Æ¬¸ß¶È
-    HDC dstDC = GetImageHDC(NULL);  // Ä¿±êÉè±¸ÉÏÏÂÎÄ£¨´°¿Ú£©
-    HDC srcDC = GetImageHDC(img);   // Ô´Éè±¸ÉÏÏÂÎÄ£¨Í¼Æ¬£©
-    // Í¸Ã÷»ìºÏ²ÎÊı£ºÊ¹ÓÃÔ´Í¼Æ¬µÄAlphaÍ¨µÀ
+    int w = img->getwidth();   // è·å–å›¾ç‰‡å®½åº¦
+    int h = img->getheight();  // è·å–å›¾ç‰‡é«˜åº¦
+    HDC dstDC = GetImageHDC(NULL);  // ç›®æ ‡è®¾å¤‡ä¸Šä¸‹æ–‡ï¼ˆçª—å£ï¼‰
+    HDC srcDC = GetImageHDC(img);   // æºè®¾å¤‡ä¸Šä¸‹æ–‡ï¼ˆå›¾ç‰‡ï¼‰
+    // é€æ˜æ··åˆå‚æ•°ï¼šä½¿ç”¨æºå›¾ç‰‡çš„Alphaé€šé“
     BLENDFUNCTION bf = { AC_SRC_OVER, 0, 255, AC_SRC_ALPHA };
-    // Ö´ĞĞÍ¸Ã÷»æÖÆ
+    // æ‰§è¡Œé€æ˜ç»˜åˆ¶
     AlphaBlend(dstDC, x, y, w, h, srcDC, 0, 0, w, h, bf);
 }
 
 /**
- * ÏÔÊ¾¹Ø¿¨¹ı³¡¶¯»­
- * @param level ¹Ø¿¨ºÅ
- * ¹¦ÄÜ£ºÔÚ¹Ø¿¨¿ªÊ¼Ç°ÏÔÊ¾¶¯»­£¬ÌáÊ¾µ±Ç°¹Ø¿¨£¬³ÖĞø3Ãë
+ * æ˜¾ç¤ºå…³å¡è¿‡åœºåŠ¨ç”»
+ * @param level å…³å¡å·
+ * åŠŸèƒ½ï¼šåœ¨å…³å¡å¼€å§‹å‰æ˜¾ç¤ºåŠ¨ç”»ï¼Œæç¤ºå½“å‰å…³å¡ï¼ŒæŒç»­3ç§’
  */
 void ShowCutScene(int level) {
     GameState& state = GameState::Instance();
-    state.isPlayingCutScene = true;               // ±ê¼ÇÕıÔÚ²¥·Å¹ı³¡
-    ULONGLONG startTime = GetTickCount64(); // ¼ÇÂ¼¿ªÊ¼Ê±¼ä
-    const int CUTSCENE_DURATION = 3000;     // ³ÖĞøÊ±¼ä3000ºÁÃë£¨3Ãë£©
+    state.isPlayingCutScene = true;               // æ ‡è®°æ­£åœ¨æ’­æ”¾è¿‡åœº
+    ULONGLONG startTime = GetTickCount64(); // è®°å½•å¼€å§‹æ—¶é—´
+    const int CUTSCENE_DURATION = 3000;     // æŒç»­æ—¶é—´3000æ¯«ç§’ï¼ˆ3ç§’ï¼‰
 
-    // ²¥·Å¹ı³¡ÒôÀÖ
+    // æ’­æ”¾è¿‡åœºéŸ³ä¹
     mciSendString(_T("play cutscene from 0"), NULL, 0, NULL);
 
-    // Ñ­»·ÏÔÊ¾¹ı³¡¶¯»­£¬Ö±µ½Ê±¼ä½áÊø
+    // å¾ªç¯æ˜¾ç¤ºè¿‡åœºåŠ¨ç”»ï¼Œç›´åˆ°æ—¶é—´ç»“æŸ
     while (GetTickCount64() - startTime < CUTSCENE_DURATION) {
         ExMessage msg;
-        while (peekmessage(&msg)) {};  // Çå¿ÕÏûÏ¢¶ÓÁĞ£¬±ÜÃâ½»»¥
+        while (peekmessage(&msg)) {};  // æ¸…ç©ºæ¶ˆæ¯é˜Ÿåˆ—ï¼Œé¿å…äº¤äº’
 
-        // »æÖÆ¹ı³¡±³¾°Í¼£¨À­ÉìÊÊÅä´°¿Ú£©
+        // ç»˜åˆ¶è¿‡åœºèƒŒæ™¯å›¾ï¼ˆæ‹‰ä¼¸é€‚é…çª—å£ï¼‰
         StretchBlt(GetImageHDC(NULL), 0, 0, WIN_WIDTH, WIN_HEIGHT,
             GetImageHDC(&cutSceneImg), 0, 0,
             cutSceneImg.getwidth(), cutSceneImg.getheight(), SRCCOPY);
 
-        // ÏÔÊ¾¹Ø¿¨ÎÄ×Ö£¨Èç¡°µÚÒ»¹Ø¡±£©
-        setbkmode(TRANSPARENT);         // ÎÄ×Ö±³¾°Í¸Ã÷
-        settextstyle(60, 0, _T("Î¢ÈíÑÅºÚ")); // ÎÄ×ÖÑùÊ½
-        settextcolor(WHITE);            // ÎÄ×ÖÑÕÉ«°×É«
+        // æ˜¾ç¤ºå…³å¡æ–‡å­—ï¼ˆå¦‚â€œç¬¬ä¸€å…³â€ï¼‰
+        setbkmode(TRANSPARENT);         // æ–‡å­—èƒŒæ™¯é€æ˜
+        settextstyle(60, 0, _T("å¾®è½¯é›…é»‘")); // æ–‡å­—æ ·å¼
+        settextcolor(WHITE);            // æ–‡å­—é¢œè‰²ç™½è‰²
         TCHAR levelText[32];
-        _stprintf_s(levelText, _T("µÚ%d¹Ø"), level);  // ¸ñÊ½»¯¹Ø¿¨ÎÄ×Ö
+        _stprintf_s(levelText, _T("ç¬¬%då…³"), level);  // æ ¼å¼åŒ–å…³å¡æ–‡å­—
         SIZE sz;
-        GetTextExtentPoint32(GetImageHDC(), levelText, _tcslen(levelText), &sz); // »ñÈ¡ÎÄ×Ö³ß´ç
-        // ¾ÓÖĞÏÔÊ¾¹Ø¿¨ÎÄ×Ö
+        GetTextExtentPoint32(GetImageHDC(), levelText, _tcslen(levelText), &sz); // è·å–æ–‡å­—å°ºå¯¸
+        // å±…ä¸­æ˜¾ç¤ºå…³å¡æ–‡å­—
         outtextxy((WIN_WIDTH - sz.cx) / 2, WIN_HEIGHT / 2 - 30, levelText);
 
-        FlushBatchDraw();  // Ë¢ĞÂ»æÖÆ
-        Sleep(16);         // ¿ØÖÆÖ¡ÂÊ£¨Ô¼60Ö¡£©
+        FlushBatchDraw();  // åˆ·æ–°ç»˜åˆ¶
+        Sleep(16);         // æ§åˆ¶å¸§ç‡ï¼ˆçº¦60å¸§ï¼‰
     }
 
-    // ½áÊø¹ı³¡¶¯»­
-    mciSendString(_T("stop cutscene"), NULL, 0, NULL);  // Í£Ö¹ÒôÀÖ
-    state.isPlayingCutScene = false;  // ±ê¼Ç¹ı³¡½áÊø
+    // ç»“æŸè¿‡åœºåŠ¨ç”»
+    mciSendString(_T("stop cutscene"), NULL, 0, NULL);  // åœæ­¢éŸ³ä¹
+    state.isPlayingCutScene = false;  // æ ‡è®°è¿‡åœºç»“æŸ
 }
 
 /**
- * ³É¾Í²Ëµ¥Àà
- * ¹¦ÄÜ£º¹ÜÀí³É¾ÍµÄÏÔÊ¾¡¢½âËø×´Ì¬¼°·µ»Ø²Ëµ¥½»»¥
+ * æˆå°±èœå•ç±»
+ * åŠŸèƒ½ï¼šç®¡ç†æˆå°±çš„æ˜¾ç¤ºã€è§£é”çŠ¶æ€åŠè¿”å›èœå•äº¤äº’
  */
 class AchieveMenu {
 public:
-    IMAGE* bg;                  // ³É¾Í½çÃæ±³¾°Í¼
-    RECT backBtn{ 830, 50, 1020, 110 };  // ·µ»Ø°´Å¥Î»ÖÃ
-    GameState& state;  // ÒıÓÃÓÎÏ·×´Ì¬
-    // ¹¹Ôìº¯Êı£º³õÊ¼»¯±³¾°Í¼
+    IMAGE* bg;                  // æˆå°±ç•Œé¢èƒŒæ™¯å›¾
+    RECT backBtn{ 830, 50, 1020, 110 };  // è¿”å›æŒ‰é’®ä½ç½®
+    GameState& state;  // å¼•ç”¨æ¸¸æˆçŠ¶æ€
+    // æ„é€ å‡½æ•°ï¼šåˆå§‹åŒ–èƒŒæ™¯å›¾
     AchieveMenu(IMAGE* bgImg) : bg(bgImg), state(GameState::Instance()) {}
 
-    // ³É¾ÍĞÅÏ¢½á¹¹Ìå£º´æ´¢µ¥¸ö³É¾ÍµÄ×´Ì¬ºÍÏÔÊ¾ÄÚÈİ
+    // æˆå°±ä¿¡æ¯ç»“æ„ä½“ï¼šå­˜å‚¨å•ä¸ªæˆå°±çš„çŠ¶æ€å’Œæ˜¾ç¤ºå†…å®¹
     struct AchieveInfo {
-        bool unlocked;          // ÊÇ·ñ½âËø
-        IMAGE* unlockedImg;     // ½âËøºóµÄÍ¼Æ¬
-        const TCHAR* title;     // ³É¾Í±êÌâ
-        const TCHAR* desc;      // ³É¾ÍÃèÊö
+        bool unlocked;          // æ˜¯å¦è§£é”
+        IMAGE* unlockedImg;     // è§£é”åçš„å›¾ç‰‡
+        const TCHAR* title;     // æˆå°±æ ‡é¢˜
+        const TCHAR* desc;      // æˆå°±æè¿°
     };
 
     /**
-     * »æÖÆµ¥¸ö³É¾Í
-     * @param x »æÖÆx×ø±ê
-     * @param y »æÖÆy×ø±ê
-     * @param info ³É¾ÍĞÅÏ¢
-     * ¹¦ÄÜ£º¸ù¾İ½âËø×´Ì¬»æÖÆ³É¾Í£¨½âËøÏÔÊ¾Í¼Æ¬ºÍÎÄ×Ö£¬Î´½âËøÏÔÊ¾ËøÍ¼±ê£©
+     * ç»˜åˆ¶å•ä¸ªæˆå°±
+     * @param x ç»˜åˆ¶xåæ ‡
+     * @param y ç»˜åˆ¶yåæ ‡
+     * @param info æˆå°±ä¿¡æ¯
+     * åŠŸèƒ½ï¼šæ ¹æ®è§£é”çŠ¶æ€ç»˜åˆ¶æˆå°±ï¼ˆè§£é”æ˜¾ç¤ºå›¾ç‰‡å’Œæ–‡å­—ï¼Œæœªè§£é”æ˜¾ç¤ºé”å›¾æ ‡ï¼‰
      */
     void DrawSingleAchieve(int x, int y, const AchieveInfo& info) {
-        // Ñ¡ÔñÏÔÊ¾µÄÍ¼Æ¬£¨½âËø/Î´½âËø£©
+        // é€‰æ‹©æ˜¾ç¤ºçš„å›¾ç‰‡ï¼ˆè§£é”/æœªè§£é”ï¼‰
         IMAGE* img = info.unlocked ? info.unlockedImg : &lockedImg;
-        // Ñ¡ÔñÏÔÊ¾µÄÎÄ×Ö£¨½âËø/Î´½âËø£©
+        // é€‰æ‹©æ˜¾ç¤ºçš„æ–‡å­—ï¼ˆè§£é”/æœªè§£é”ï¼‰
         const TCHAR* title = info.unlocked ? info.title : _T("???");
         const TCHAR* desc = info.unlocked ? info.desc : _T("???");
 
-        // »æÖÆ³É¾ÍÍ¼Æ¬
+        // ç»˜åˆ¶æˆå°±å›¾ç‰‡
         putimage_alpha(x, y, img);
 
-        // »æÖÆ³É¾Í±êÌâºÍÃèÊö
+        // ç»˜åˆ¶æˆå°±æ ‡é¢˜å’Œæè¿°
         setbkmode(TRANSPARENT);
-        settextcolor(BLACK);  // ÎÄ×ÖÑÕÉ«ºÚÉ«
+        settextcolor(BLACK);  // æ–‡å­—é¢œè‰²é»‘è‰²
 
-        // »æÖÆ±êÌâ
-        settextstyle(30, 0, _T("Î¢ÈíÑÅºÚ"));
-        outtextxy(x + 90, y, title);  // ±êÌâÔÚÍ¼Æ¬ÓÒ²à
+        // ç»˜åˆ¶æ ‡é¢˜
+        settextstyle(30, 0, _T("å¾®è½¯é›…é»‘"));
+        outtextxy(x + 90, y, title);  // æ ‡é¢˜åœ¨å›¾ç‰‡å³ä¾§
 
-        // »æÖÆÃèÊö£¨×Ô¶¯»»ĞĞ£©
-        settextstyle(24, 0, _T("Î¢ÈíÑÅºÚ"));
-        RECT descRect = { x + 90, y + 35, x + 1200, y + 100 };  // ÃèÊöÇøÓò
-        drawtext(desc, &descRect, DT_WORDBREAK);  // ×Ô¶¯»»ĞĞ»æÖÆ
+        // ç»˜åˆ¶æè¿°ï¼ˆè‡ªåŠ¨æ¢è¡Œï¼‰
+        settextstyle(24, 0, _T("å¾®è½¯é›…é»‘"));
+        RECT descRect = { x + 90, y + 35, x + 1200, y + 100 };  // æè¿°åŒºåŸŸ
+        drawtext(desc, &descRect, DT_WORDBREAK);  // è‡ªåŠ¨æ¢è¡Œç»˜åˆ¶
     }
 
     /**
-     * ÔËĞĞ³É¾Í²Ëµ¥
-     * ¹¦ÄÜ£ºÑ­»·ÏÔÊ¾³É¾Í½çÃæ£¬´¦Àí·µ»Ø°´Å¥µã»÷
+     * è¿è¡Œæˆå°±èœå•
+     * åŠŸèƒ½ï¼šå¾ªç¯æ˜¾ç¤ºæˆå°±ç•Œé¢ï¼Œå¤„ç†è¿”å›æŒ‰é’®ç‚¹å‡»
      */
     void Run() {
-        ExMessage msg;  // ÏûÏ¢±äÁ¿
+        ExMessage msg;  // æ¶ˆæ¯å˜é‡
 
-        // ¶¨ÒåËùÓĞ³É¾ÍµÄĞÅÏ¢£¨Ë³ĞòÓë³É¾Í±äÁ¿¶ÔÓ¦£©
+        // å®šä¹‰æ‰€æœ‰æˆå°±çš„ä¿¡æ¯ï¼ˆé¡ºåºä¸æˆå°±å˜é‡å¯¹åº”ï¼‰
         AchieveInfo achieves[] = {
-            {state.achieve_first, &achieve_first_img, _T("Ê×´Î¿ª²É"), _T("ÎªÁËÄà¿ª!")},
-            {state.achieve_screw, &achieve_screw_img, _T("Ê³ÌÃÂİË¿"), _T("´«ËµÕâÊÇÁùÊ³ÌÃ±ù¹ñµôÂäµÄÂİË¿,ÄÑµÀÊÇ±»·ç´µÉÏ´óºÚÉ½µÄ?(bushi")},
-            {state.achieve_bomb, &achieve_bomb_img, _T("ÕâÊÇ£¿Õ¨Ò©£¿"), _T("¾İËµµ±ÄêÄà¿ª¶şÆÚ¿ª·¢Ê¹ÓÃÁË´óÁ¿Õ¨Ò©,½á¹û±»ÖÜ±ßÁÚ¾ÓÍ¶ËßÁË...ËùÒÔÄã×îºÃÒ²²»ÒªÓÃ,ÄÜ²»ÓÃ¾Í±ğÓÃ°É!")},
-            {state.achieve_underdev, &achieve_underdev_img, _T("¿ª²É²»×ã"), _T("Äã¸ÃÔõÃ´ÏòÔº³¤ºÍÄà¿ª½»´ú?")},
-            {state.achieve_perfectdev, &achieve_perfectdev_img, _T("ÍêÃÀ¿ª·¢"), _T("ÖØÕñÄà¿ªÈÙ¹â,ÎÒ±²Òå²»Èİ´Ç!")},
-            {state.achieve_overdev, &achieve_overdev_img, _T("¿ª·¢¹ı¶È"), _T("²»ÒªĞ¡¿´Äà¿ª¸ú´óºÚÉ½µÄî¿°í°¡!")},
+            {state.achieve_first, &achieve_first_img, _T("é¦–æ¬¡å¼€é‡‡"), _T("ä¸ºäº†æ³¥å¼€!")},
+            {state.achieve_screw, &achieve_screw_img, _T("é£Ÿå ‚èºä¸"), _T("ä¼ è¯´è¿™æ˜¯å…­é£Ÿå ‚å†°æŸœæ‰è½çš„èºä¸,éš¾é“æ˜¯è¢«é£å¹ä¸Šå¤§é»‘å±±çš„?(bushi")},
+            {state.achieve_bomb, &achieve_bomb_img, _T("è¿™æ˜¯ï¼Ÿç‚¸è¯ï¼Ÿ"), _T("æ®è¯´å½“å¹´æ³¥å¼€äºŒæœŸå¼€å‘ä½¿ç”¨äº†å¤§é‡ç‚¸è¯,ç»“æœè¢«å‘¨è¾¹é‚»å±…æŠ•è¯‰äº†...æ‰€ä»¥ä½ æœ€å¥½ä¹Ÿä¸è¦ç”¨,èƒ½ä¸ç”¨å°±åˆ«ç”¨å§!")},
+            {state.achieve_underdev, &achieve_underdev_img, _T("å¼€é‡‡ä¸è¶³"), _T("ä½ è¯¥æ€ä¹ˆå‘é™¢é•¿å’Œæ³¥å¼€äº¤ä»£?")},
+            {state.achieve_perfectdev, &achieve_perfectdev_img, _T("å®Œç¾å¼€å‘"), _T("é‡æŒ¯æ³¥å¼€è£å…‰,æˆ‘è¾ˆä¹‰ä¸å®¹è¾!")},
+            {state.achieve_overdev, &achieve_overdev_img, _T("å¼€å‘è¿‡åº¦"), _T("ä¸è¦å°çœ‹æ³¥å¼€è·Ÿå¤§é»‘å±±çš„ç¾ç»Šå•Š!")},
         };
 
-        const int lineSpacing = 90;  // ³É¾ÍÖ®¼äµÄĞĞ¾à
-        const int startX = 100, startY = 80;  // Ê×¸ö³É¾ÍµÄÆğÊ¼Î»ÖÃ
+        const int lineSpacing = 90;  // æˆå°±ä¹‹é—´çš„è¡Œè·
+        const int startX = 100, startY = 80;  // é¦–ä¸ªæˆå°±çš„èµ·å§‹ä½ç½®
 
-        // ³É¾Í½çÃæÖ÷Ñ­»·
+        // æˆå°±ç•Œé¢ä¸»å¾ªç¯
         while (true) {
-            // »æÖÆ±³¾°Í¼
+            // ç»˜åˆ¶èƒŒæ™¯å›¾
             StretchBlt(GetImageHDC(NULL), 0, 0, WIN_WIDTH, WIN_HEIGHT,
                 GetImageHDC(bg), 0, 0, bg->getwidth(), bg->getheight(), SRCCOPY);
 
-            // »æÖÆÃ¿¸ö³É¾Í
+            // ç»˜åˆ¶æ¯ä¸ªæˆå°±
             for (int i = 0; i < 6; i++) {
-                int y = startY + i * lineSpacing;  // ¼ÆËãµÚi¸ö³É¾ÍµÄy×ø±ê
+                int y = startY + i * lineSpacing;  // è®¡ç®—ç¬¬iä¸ªæˆå°±çš„yåæ ‡
                 DrawSingleAchieve(startX, y, achieves[i]);
             }
 
-            // »æÖÆ·µ»Ø°´Å¥
-            setfillcolor(RGB(100, 200, 100));  // °´Å¥ÑÕÉ«£¨Ç³ÂÌÉ«£©
-            fillrectangle(backBtn.left, backBtn.top, backBtn.right, backBtn.bottom);  // »æÖÆ°´Å¥¾ØĞÎ
+            // ç»˜åˆ¶è¿”å›æŒ‰é’®
+            setfillcolor(RGB(100, 200, 100));  // æŒ‰é’®é¢œè‰²ï¼ˆæµ…ç»¿è‰²ï¼‰
+            fillrectangle(backBtn.left, backBtn.top, backBtn.right, backBtn.bottom);  // ç»˜åˆ¶æŒ‰é’®çŸ©å½¢
             settextcolor(BLACK);
-            settextstyle(40, 0, _T("Î¢ÈíÑÅºÚ"));
-            outtextxy(backBtn.left + 20, backBtn.top + 10, _T("  ·µ»Ø²Ëµ¥"));  // °´Å¥ÎÄ×Ö
+            settextstyle(40, 0, _T("å¾®è½¯é›…é»‘"));
+            outtextxy(backBtn.left + 20, backBtn.top + 10, _T("  è¿”å›èœå•"));  // æŒ‰é’®æ–‡å­—
 
-            FlushBatchDraw();  // Ë¢ĞÂ»æÖÆ
+            FlushBatchDraw();  // åˆ·æ–°ç»˜åˆ¶
 
-            // ´¦Àíµã»÷ÊÂ¼ş
+            // å¤„ç†ç‚¹å‡»äº‹ä»¶
             while (peekmessage(&msg)) {
-                if (msg.message == WM_LBUTTONDOWN) {  // ×ó¼üµã»÷
-                    // ¼ì²éÊÇ·ñµã»÷·µ»Ø°´Å¥
-                    if (PtInRect(&backBtn, { msg.x, msg.y })) return;  // ÍË³ö³É¾Í½çÃæ
+                if (msg.message == WM_LBUTTONDOWN) {  // å·¦é”®ç‚¹å‡»
+                    // æ£€æŸ¥æ˜¯å¦ç‚¹å‡»è¿”å›æŒ‰é’®
+                    if (PtInRect(&backBtn, { msg.x, msg.y })) return;  // é€€å‡ºæˆå°±ç•Œé¢
                 }
             }
         }
     }
 };
-AchieveMenu achieveMenu(&achieveBG);  // ÊµÀı»¯³É¾Í²Ëµ¥
+AchieveMenu achieveMenu(&achieveBG);  // å®ä¾‹åŒ–æˆå°±èœå•
 
 /**
- * Ö÷²Ëµ¥Àà
- * ¹¦ÄÜ£º¹ÜÀíÖ÷²Ëµ¥½çÃæ£¨¿ªÊ¼ÓÎÏ·¡¢°ïÖú¡¢³É¾Í°´Å¥£©¼°½çÃæÇĞ»»
+ * ä¸»èœå•ç±»
+ * åŠŸèƒ½ï¼šç®¡ç†ä¸»èœå•ç•Œé¢ï¼ˆå¼€å§‹æ¸¸æˆã€å¸®åŠ©ã€æˆå°±æŒ‰é’®ï¼‰åŠç•Œé¢åˆ‡æ¢
  */
 class Menu {
 public:
-    IMAGE* bg;  // ²Ëµ¥±³¾°Í¼
+    IMAGE* bg;  // èœå•èƒŒæ™¯å›¾
     GameState& state;
-    // °´Å¥Î»ÖÃ£¨¿ªÊ¼ÓÎÏ·¡¢°ïÖú¡¢³É¾Í£©
+    // æŒ‰é’®ä½ç½®ï¼ˆå¼€å§‹æ¸¸æˆã€å¸®åŠ©ã€æˆå°±ï¼‰
     RECT btn_start{ 390,200,690,270 }, btn_help{ 390,300,690,370 }, btn_achieve{ 390,400,690,470 };
 
-    // ¹¹Ôìº¯Êı£º³õÊ¼»¯±³¾°Í¼
+    // æ„é€ å‡½æ•°ï¼šåˆå§‹åŒ–èƒŒæ™¯å›¾
     Menu(IMAGE* bgImg) : bg(bgImg) , state(GameState::Instance() ){}
 
     /**
-     * ÔËĞĞ²Ëµ¥
-     * ¹¦ÄÜ£ºÑ­»·ÏÔÊ¾²Ëµ¥£¬´¦Àí°´Å¥µã»÷£¬·µ»Ø²Ù×÷½á¹û£¨1=¿ªÊ¼ÓÎÏ·£¬0=ÆäËû£©
+     * è¿è¡Œèœå•
+     * åŠŸèƒ½ï¼šå¾ªç¯æ˜¾ç¤ºèœå•ï¼Œå¤„ç†æŒ‰é’®ç‚¹å‡»ï¼Œè¿”å›æ“ä½œç»“æœï¼ˆ1=å¼€å§‹æ¸¸æˆï¼Œ0=å…¶ä»–ï¼‰
      */
     int Run() {
-        ExMessage msg;  // ÏûÏ¢±äÁ¿
+        ExMessage msg;  // æ¶ˆæ¯å˜é‡
         while (true) {
-            settextstyle(32, 0, _T("Î¢ÈíÑÅºÚ"), 0, 0, 700, 0, 0, 0);
+            settextstyle(32, 0, _T("å¾®è½¯é›…é»‘"), 0, 0, 700, 0, 0, 0);
 
-            // Èç¹ûÔÚÓÎÏ·ËµÃ÷½çÃæ
+            // å¦‚æœåœ¨æ¸¸æˆè¯´æ˜ç•Œé¢
             if (state.isInInstruction) {
-                // ²¥·ÅËµÃ÷½çÃæ±³¾°ÒôÀÖ£¨½öÊ×´Î½øÈëÊ±£©
+                // æ’­æ”¾è¯´æ˜ç•Œé¢èƒŒæ™¯éŸ³ä¹ï¼ˆä»…é¦–æ¬¡è¿›å…¥æ—¶ï¼‰
                 if (!state.isInstructionBGMPlaying) {
-                    mciSendString(_T("stop menu"), NULL, 0, NULL);  // Í£Ö¹²Ëµ¥ÒôÀÖ
-                    mciSendString(_T("play instruction repeat from 0"), NULL, 0, NULL);  // ²¥·ÅËµÃ÷ÒôÀÖ
+                    mciSendString(_T("stop menu"), NULL, 0, NULL);  // åœæ­¢èœå•éŸ³ä¹
+                    mciSendString(_T("play instruction repeat from 0"), NULL, 0, NULL);  // æ’­æ”¾è¯´æ˜éŸ³ä¹
                     state.isInstructionBGMPlaying = true;
                     state.isMenuBGMPlaying = false;
                 }
 
-                // »æÖÆËµÃ÷½çÃæ±³¾°
+                // ç»˜åˆ¶è¯´æ˜ç•Œé¢èƒŒæ™¯
                 StretchBlt(GetImageHDC(NULL), 0, 0, WIN_WIDTH, WIN_HEIGHT,
                     GetImageHDC(&instructionBG), 0, 0,
                     instructionBG.getwidth(), instructionBG.getheight(), SRCCOPY);
 
-                // »æÖÆÍæ·¨ËµÃ÷ÎÄ×Ö
+                // ç»˜åˆ¶ç©æ³•è¯´æ˜æ–‡å­—
                 setbkmode(TRANSPARENT);
                 settextcolor(YELLOW);
-                settextstyle(32, 0, _T("Î¢ÈíÑÅºÚ"), 0, 0, 700, 0, 0, 0);
-                RECT textRect = { 100, 50, WIN_WIDTH - 100, WIN_HEIGHT - 100 };  // ÎÄ×ÖÇøÓò
-                const TCHAR* text = _T("Íæ·¨ËµÃ÷£º×ó¼ü·¢Éä¹³×Ó,¹´È¡µ½¿óÊ¯Ê±¿ÉÒÔÓÒ¼ü·ÅÏÂ,¹´È¡µ½Õ¨Ò©Ê±¿ÉÒÔ°´¿Õ¸ñÒı±¬\n¾çÇé¼ò½é: Á¬Àí´óÑ§¿ª·¢ÇøĞ£ÇøÒ»Ö±¶¼ÔÚÍÏÁ¬Àí´óÑ§·ÖÊıÏßµÄºóÍÈ(bushi\nÓÚÊÇºõ,ÎªÎüÒıÏÂÒ»½ìÑ§×Ó,Äà¿ª´óµ¶À«¸«µØÀ©½¨ing...\nÎªÁËÖúÁ¦Äà¿ªµÄÊ©¹¤,marry newÎŞ·¨µÖÓù×¡´óºÚÉ½µÄÓÕ»ó,¾ö¶¨ÅÉÇ²ÇóĞ¡ÊµÈ¥¿ª·¢´óºÚÉ½µÄ¿ó²ú×ÊÔ´\nËûÄÜ¹»Íê³ÉÈÎÎñÂğ?\nÓÑÇéÌáĞÑ: ÒªÍÚ¹»5000·Ö,µ«ÍÚÌ«¶àÇóĞ¡Êµ»á²úÉúÍÚ¿ó³É±¾,ÏûºÄ·ÖÊı,ÇÒÔ½Éî²ãÏûºÄÔ½¶àÅ¶¡£×¢Òâ»·¾³,²»ÒªÍüÁËÄà¿ªºÍ´óºÚÉ½¶şÊ®¶àÄêµÄî¿°í°¡!\nÃâÔğÉùÃ÷: ±¾¾çÇé´¿ÊôĞé¹¹,ÈçÓĞÀ×Í¬,´¿ÊôÇÉºÏ");
-                drawtext(text, &textRect, DT_WORDBREAK);  // ×Ô¶¯»»ĞĞ
+                settextstyle(32, 0, _T("å¾®è½¯é›…é»‘"), 0, 0, 700, 0, 0, 0);
+                RECT textRect = { 100, 50, WIN_WIDTH - 100, WIN_HEIGHT - 100 };  // æ–‡å­—åŒºåŸŸ
+                const TCHAR* text = _T("ç©æ³•è¯´æ˜ï¼šå·¦é”®å‘å°„é’©å­,å‹¾å–åˆ°çŸ¿çŸ³æ—¶å¯ä»¥å³é”®æ”¾ä¸‹,å‹¾å–åˆ°ç‚¸è¯æ—¶å¯ä»¥æŒ‰ç©ºæ ¼å¼•çˆ†\nå‰§æƒ…ç®€ä»‹: è¿ç†å¤§å­¦å¼€å‘åŒºæ ¡åŒºä¸€ç›´éƒ½åœ¨æ‹–è¿ç†å¤§å­¦åˆ†æ•°çº¿çš„åè…¿(bushi\näºæ˜¯ä¹,ä¸ºå¸å¼•ä¸‹ä¸€å±Šå­¦å­,æ³¥å¼€å¤§åˆ€é˜”æ–§åœ°æ‰©å»ºing...\nä¸ºäº†åŠ©åŠ›æ³¥å¼€çš„æ–½å·¥,marry newæ— æ³•æŠµå¾¡ä½å¤§é»‘å±±çš„è¯±æƒ‘,å†³å®šæ´¾é£æ±‚å°å®å»å¼€å‘å¤§é»‘å±±çš„çŸ¿äº§èµ„æº\nä»–èƒ½å¤Ÿå®Œæˆä»»åŠ¡å—?\nå‹æƒ…æé†’: è¦æŒ–å¤Ÿ5000åˆ†,ä½†æŒ–å¤ªå¤šæ±‚å°å®ä¼šäº§ç”ŸæŒ–çŸ¿æˆæœ¬,æ¶ˆè€—åˆ†æ•°,ä¸”è¶Šæ·±å±‚æ¶ˆè€—è¶Šå¤šå“¦ã€‚æ³¨æ„ç¯å¢ƒ,ä¸è¦å¿˜äº†æ³¥å¼€å’Œå¤§é»‘å±±äºŒåå¤šå¹´çš„ç¾ç»Šå•Š!\nå…è´£å£°æ˜: æœ¬å‰§æƒ…çº¯å±è™šæ„,å¦‚æœ‰é›·åŒ,çº¯å±å·§åˆ");
+                drawtext(text, &textRect, DT_WORDBREAK);  // è‡ªåŠ¨æ¢è¡Œ
 
-                // »æÖÆ·µ»Ø²Ëµ¥°´Å¥
-                setfillcolor(RGB(100, 200, 100));  // °´Å¥ÑÕÉ«
+                // ç»˜åˆ¶è¿”å›èœå•æŒ‰é’®
+                setfillcolor(RGB(100, 200, 100));  // æŒ‰é’®é¢œè‰²
                 fillrectangle(returnBtn.left, returnBtn.top, returnBtn.right, returnBtn.bottom);
-                settextstyle(40, 0, _T("Î¢ÈíÑÅºÚ"));
+                settextstyle(40, 0, _T("å¾®è½¯é›…é»‘"));
                 settextcolor(BLACK);
-                outtextxy(returnBtn.left + 20, returnBtn.top + 10, _T("  ·µ»Ø²Ëµ¥"));
+                outtextxy(returnBtn.left + 20, returnBtn.top + 10, _T("  è¿”å›èœå•"));
 
-                // »æÖÆ×óÏÂ½Ç½ÇÉ«Í¼Æ¬£¨ÇóĞ¡Êµ£©
+                // ç»˜åˆ¶å·¦ä¸‹è§’è§’è‰²å›¾ç‰‡ï¼ˆæ±‚å°å®ï¼‰
                 int leftBottomX = 150;
                 int leftBottomY = WIN_HEIGHT - qiuxiaoshiImg.getheight();
                 putimage_alpha(leftBottomX, leftBottomY, &qiuxiaoshiImg);
 
-                // »æÖÆÓÒÏÂ½Ç½ÇÉ«Í¼Æ¬£¨marry new£©
+                // ç»˜åˆ¶å³ä¸‹è§’è§’è‰²å›¾ç‰‡ï¼ˆmarry newï¼‰
                 int rightBottomX = WIN_WIDTH - marryNewImg.getwidth();
                 int rightBottomY = WIN_HEIGHT - marryNewImg.getheight();
                 putimage_alpha(rightBottomX, rightBottomY, &marryNewImg);
 
-                FlushBatchDraw();  // Ë¢ĞÂ»æÖÆ
+                FlushBatchDraw();  // åˆ·æ–°ç»˜åˆ¶
 
-                // ´¦ÀíËµÃ÷½çÃæµÄµã»÷ÊÂ¼ş
+                // å¤„ç†è¯´æ˜ç•Œé¢çš„ç‚¹å‡»äº‹ä»¶
                 while (peekmessage(&msg)) {
-                    if (msg.message == WM_LBUTTONDOWN) {  // ×ó¼üµã»÷
+                    if (msg.message == WM_LBUTTONDOWN) {  // å·¦é”®ç‚¹å‡»
                         int x = msg.x, y = msg.y;
-                        // µã»÷·µ»Ø°´Å¥£¬»Øµ½Ö÷²Ëµ¥
+                        // ç‚¹å‡»è¿”å›æŒ‰é’®ï¼Œå›åˆ°ä¸»èœå•
                         if (PtInRect(&returnBtn, { x, y })) {
-                            mciSendString(_T("stop instruction"), NULL, 0, NULL);  // Í£Ö¹ËµÃ÷ÒôÀÖ
-                            state.isInInstruction = false;  // ±ê¼ÇÍË³öËµÃ÷½çÃæ
-                            return 0;  // ·µ»Ø²Ëµ¥Ö÷Ñ­»·
+                            mciSendString(_T("stop instruction"), NULL, 0, NULL);  // åœæ­¢è¯´æ˜éŸ³ä¹
+                            state.isInInstruction = false;  // æ ‡è®°é€€å‡ºè¯´æ˜ç•Œé¢
+                            return 0;  // è¿”å›èœå•ä¸»å¾ªç¯
                         }
                     }
                 }
             }
-            // Ö÷²Ëµ¥½çÃæ
+            // ä¸»èœå•ç•Œé¢
             else {
-                // ²¥·Å²Ëµ¥±³¾°ÒôÀÖ£¨½öÊ×´Î½øÈëÊ±£©
+                // æ’­æ”¾èœå•èƒŒæ™¯éŸ³ä¹ï¼ˆä»…é¦–æ¬¡è¿›å…¥æ—¶ï¼‰
                 if (!state.isMenuBGMPlaying) {
-                    mciSendString(_T("play menu repeat from 0"), NULL, 0, NULL);  // ²¥·Å²Ëµ¥ÒôÀÖ
+                    mciSendString(_T("play menu repeat from 0"), NULL, 0, NULL);  // æ’­æ”¾èœå•éŸ³ä¹
                     state.isMenuBGMPlaying = true;
                     state.isInstructionBGMPlaying = false;
                 }
 
-                // »æÖÆ²Ëµ¥±³¾°
+                // ç»˜åˆ¶èœå•èƒŒæ™¯
                 StretchBlt(GetImageHDC(NULL), 0, 0, WIN_WIDTH, WIN_HEIGHT, GetImageHDC(bg), 0, 0, bg->getwidth(), bg->getheight(), SRCCOPY);
 
-                // ÏÔÊ¾µ±Ç°×î¸ß·Ö
+                // æ˜¾ç¤ºå½“å‰æœ€é«˜åˆ†
                 setbkmode(TRANSPARENT);
-                settextstyle(50, 0, _T("Î¢ÈíÑÅºÚ"));
+                settextstyle(50, 0, _T("å¾®è½¯é›…é»‘"));
                 settextcolor(BLACK);
                 TCHAR highScoreText[64];
-                _stprintf_s(highScoreText, _T("µ±Ç°×î¸ß·Ö£º%d"), state.tempHighScore);
-                outtextxy(20, 20, highScoreText);  // ×óÉÏ½ÇÏÔÊ¾
+                _stprintf_s(highScoreText, _T("å½“å‰æœ€é«˜åˆ†ï¼š%d"), state.tempHighScore);
+                outtextxy(20, 20, highScoreText);  // å·¦ä¸Šè§’æ˜¾ç¤º
 
-                // ÏÔÊ¾ĞÂ³É¾ÍÌáÊ¾
+                // æ˜¾ç¤ºæ–°æˆå°±æç¤º
                 if (state.gotNewAchievement) {
                     setbkmode(TRANSPARENT);
-                    settextstyle(50, 0, _T("Î¢ÈíÑÅºÚ"));
+                    settextstyle(50, 0, _T("å¾®è½¯é›…é»‘"));
                     settextcolor(RED);
-                    outtextxy(WIN_WIDTH - 300, 20, _T("Äã»ñµÃÁËĞÂ³É¾Í£¡"));
+                    outtextxy(WIN_WIDTH - 300, 20, _T("ä½ è·å¾—äº†æ–°æˆå°±ï¼"));
                 }
 
-                // ÏÔÊ¾ÓÎÏ·±êÌâ
+                // æ˜¾ç¤ºæ¸¸æˆæ ‡é¢˜
                 setbkmode(TRANSPARENT);
-                settextstyle(108, 0, _T("Î¢ÈíÑÅºÚ"));
-                settextcolor(RGB(255, 105, 180));  // ·ÛÉ«±êÌâ
+                settextstyle(108, 0, _T("å¾®è½¯é›…é»‘"));
+                settextcolor(RGB(255, 105, 180));  // ç²‰è‰²æ ‡é¢˜
                 SIZE sz;
-                GetTextExtentPoint32(GetImageHDC(), _T("´óºÚÉ½µÄÓÕ»ó"), _tcslen(_T("´óºÚÉ½µÄÓÕ»ó")), &sz);
-                outtextxy((WIN_WIDTH - sz.cx) - 375, 60, _T(" ´ó ºÚ É½ µÄ ÓÕ »ó "));  // ¾ÓÖĞÏÔÊ¾
+                GetTextExtentPoint32(GetImageHDC(), _T("å¤§é»‘å±±çš„è¯±æƒ‘"), _tcslen(_T("å¤§é»‘å±±çš„è¯±æƒ‘")), &sz);
+                outtextxy((WIN_WIDTH - sz.cx) - 375, 60, _T(" å¤§ é»‘ å±± çš„ è¯± æƒ‘ "));  // å±…ä¸­æ˜¾ç¤º
 
-                // »æÖÆÈı¸ö°´Å¥£¨¿ªÊ¼ÓÎÏ·¡¢°ïÖú¡¢³É¾Í£©
-                settextstyle(40, 0, _T("Î¢ÈíÑÅºÚ"));
-                setfillcolor(RGB(100, 200, 100));  // °´Å¥ÑÕÉ«£¨Ç³ÂÌÉ«£©
-                fillrectangle(btn_start.left, btn_start.top, btn_start.right, btn_start.bottom);  // ¿ªÊ¼ÓÎÏ·°´Å¥
-                fillrectangle(btn_help.left, btn_help.top, btn_help.right, btn_help.bottom);      // °ïÖú°´Å¥
-                fillrectangle(btn_achieve.left, btn_achieve.top, btn_achieve.right, btn_achieve.bottom);  // ³É¾Í°´Å¥
+                // ç»˜åˆ¶ä¸‰ä¸ªæŒ‰é’®ï¼ˆå¼€å§‹æ¸¸æˆã€å¸®åŠ©ã€æˆå°±ï¼‰
+                settextstyle(40, 0, _T("å¾®è½¯é›…é»‘"));
+                setfillcolor(RGB(100, 200, 100));  // æŒ‰é’®é¢œè‰²ï¼ˆæµ…ç»¿è‰²ï¼‰
+                fillrectangle(btn_start.left, btn_start.top, btn_start.right, btn_start.bottom);  // å¼€å§‹æ¸¸æˆæŒ‰é’®
+                fillrectangle(btn_help.left, btn_help.top, btn_help.right, btn_help.bottom);      // å¸®åŠ©æŒ‰é’®
+                fillrectangle(btn_achieve.left, btn_achieve.top, btn_achieve.right, btn_achieve.bottom);  // æˆå°±æŒ‰é’®
 
-                // °´Å¥ÎÄ×Ö
+                // æŒ‰é’®æ–‡å­—
                 settextcolor(BLACK);
-                outtextxy(btn_start.left + 30, btn_start.top + 10, _T("       ¿ªÊ¼ÓÎÏ·"));
-                outtextxy(btn_help.left + 30, btn_help.top + 10, _T("       ÓÎÏ·ËµÃ÷"));
-                outtextxy(btn_achieve.left + 30, btn_achieve.top + 10, _T("       ³É¾ÍÏµÍ³"));
+                outtextxy(btn_start.left + 30, btn_start.top + 10, _T("       å¼€å§‹æ¸¸æˆ"));
+                outtextxy(btn_help.left + 30, btn_help.top + 10, _T("       æ¸¸æˆè¯´æ˜"));
+                outtextxy(btn_achieve.left + 30, btn_achieve.top + 10, _T("       æˆå°±ç³»ç»Ÿ"));
 
-                FlushBatchDraw();  // Ë¢ĞÂ»æÖÆ
+                FlushBatchDraw();  // åˆ·æ–°ç»˜åˆ¶
 
-                // ´¦ÀíÖ÷²Ëµ¥µã»÷ÊÂ¼ş
+                // å¤„ç†ä¸»èœå•ç‚¹å‡»äº‹ä»¶
                 while (peekmessage(&msg)) {
-                    if (msg.message == WM_LBUTTONDOWN) {  // ×ó¼üµã»÷
+                    if (msg.message == WM_LBUTTONDOWN) {  // å·¦é”®ç‚¹å‡»
                         int x = msg.x, y = msg.y;
-                        if (PtInRect(&btn_start, { x,y })) return 1;  // µã»÷¿ªÊ¼ÓÎÏ·£¬·µ»Ø1
-                        if (PtInRect(&btn_help, { x,y })) {  // µã»÷°ïÖú
-                            mciSendString(_T("stop menu"), NULL, 0, NULL);  // Í£Ö¹²Ëµ¥ÒôÀÖ
-                            state.isInInstruction = true;  // ±ê¼Ç½øÈëËµÃ÷½çÃæ
+                        if (PtInRect(&btn_start, { x,y })) return 1;  // ç‚¹å‡»å¼€å§‹æ¸¸æˆï¼Œè¿”å›1
+                        if (PtInRect(&btn_help, { x,y })) {  // ç‚¹å‡»å¸®åŠ©
+                            mciSendString(_T("stop menu"), NULL, 0, NULL);  // åœæ­¢èœå•éŸ³ä¹
+                            state.isInInstruction = true;  // æ ‡è®°è¿›å…¥è¯´æ˜ç•Œé¢
                             return 0;
                         }
-                        if (PtInRect(&btn_achieve, { x,y })) {  // µã»÷³É¾Í
-                            state.gotNewAchievement = 0;  // ½øÈë³É¾Í½çÃæºó£¬ĞÂ³É¾ÍÌáÊ¾ÏûÊ§
-                            achieveMenu.Run();  // ÔËĞĞ³É¾Í²Ëµ¥
+                        if (PtInRect(&btn_achieve, { x,y })) {  // ç‚¹å‡»æˆå°±
+                            state.gotNewAchievement = 0;  // è¿›å…¥æˆå°±ç•Œé¢åï¼Œæ–°æˆå°±æç¤ºæ¶ˆå¤±
+                            achieveMenu.Run();  // è¿è¡Œæˆå°±èœå•
                             return 0;
                         }
                     }
@@ -393,34 +393,34 @@ public:
 };
 
 /**
- * ±¬Õ¨¶¯»­Àà
- * ¹¦ÄÜ£º¹ÜÀí±¬Õ¨Ğ§¹ûµÄÖ¡¶¯»­£¨¼ÓÔØÖ¡Í¼Æ¬¡¢²¥·Å¶¯»­£©
+ * çˆ†ç‚¸åŠ¨ç”»ç±»
+ * åŠŸèƒ½ï¼šç®¡ç†çˆ†ç‚¸æ•ˆæœçš„å¸§åŠ¨ç”»ï¼ˆåŠ è½½å¸§å›¾ç‰‡ã€æ’­æ”¾åŠ¨ç”»ï¼‰
  */
 class ExplodeAnimation {
 public:
-    POINT pos;          // ±¬Õ¨Î»ÖÃ
-    int frame = 0;      // µ±Ç°Ö¡
-    bool active = false;// ¶¯»­ÊÇ·ñ¼¤»î
-    static const int maxFrame = 24;  // ×ÜÖ¡Êı
+    POINT pos;          // çˆ†ç‚¸ä½ç½®
+    int frame = 0;      // å½“å‰å¸§
+    bool active = false;// åŠ¨ç”»æ˜¯å¦æ¿€æ´»
+    static const int maxFrame = 24;  // æ€»å¸§æ•°
     static unique_ptr<IMAGE> frames[maxFrame];
 
     /**
-     * ¼ÓÔØ±¬Õ¨¶¯»­×ÊÔ´
-     * ¹¦ÄÜ£º´ÓÎÄ¼ş¼ÓÔØËùÓĞ±¬Õ¨Ö¡Í¼Æ¬
+     * åŠ è½½çˆ†ç‚¸åŠ¨ç”»èµ„æº
+     * åŠŸèƒ½ï¼šä»æ–‡ä»¶åŠ è½½æ‰€æœ‰çˆ†ç‚¸å¸§å›¾ç‰‡
      */
     static void LoadResources() {
         for (int i = 0; i < maxFrame; i++) {
             TCHAR path[64];
-            _stprintf_s(path, _T("image\\explode%d.png"), i);  // Í¼Æ¬Â·¾¶£¨explode0.pngµ½explode23.png£©
-            frames[i] = std::make_unique<IMAGE>();  // ×Ô¶¯¹ÜÀíÄÚ´æ
+            _stprintf_s(path, _T("image\\explode%d.png"), i);  // å›¾ç‰‡è·¯å¾„ï¼ˆexplode0.pngåˆ°explode23.pngï¼‰
+            frames[i] = std::make_unique<IMAGE>();  // è‡ªåŠ¨ç®¡ç†å†…å­˜
             loadimage(frames[i].get(), path);
         }
     }
 
     /**
-     * ¿ªÊ¼±¬Õ¨¶¯»­
-     * @param p ±¬Õ¨ÖĞĞÄÎ»ÖÃ
-     * ¹¦ÄÜ£º³õÊ¼»¯¶¯»­×´Ì¬£¬×¼±¸²¥·Å
+     * å¼€å§‹çˆ†ç‚¸åŠ¨ç”»
+     * @param p çˆ†ç‚¸ä¸­å¿ƒä½ç½®
+     * åŠŸèƒ½ï¼šåˆå§‹åŒ–åŠ¨ç”»çŠ¶æ€ï¼Œå‡†å¤‡æ’­æ”¾
      */
     void Start(POINT p) {
         pos = p;
@@ -429,89 +429,89 @@ public:
     }
 
     /**
-     * »æÖÆ±¬Õ¨¶¯»­
-     * ¹¦ÄÜ£º¸ù¾İµ±Ç°Ö¡»æÖÆ±¬Õ¨Í¼Æ¬£¬×Ô¶¯ÍÆ½øÖ¡£¬½áÊøºó±ê¼ÇÎª·Ç¼¤»î
+     * ç»˜åˆ¶çˆ†ç‚¸åŠ¨ç”»
+     * åŠŸèƒ½ï¼šæ ¹æ®å½“å‰å¸§ç»˜åˆ¶çˆ†ç‚¸å›¾ç‰‡ï¼Œè‡ªåŠ¨æ¨è¿›å¸§ï¼Œç»“æŸåæ ‡è®°ä¸ºéæ¿€æ´»
      */
     void Draw() {
-        if (!active) return;  // Î´¼¤»îÔò²»»æÖÆ
-        if (frame < maxFrame) {  // Î´²¥·ÅÍêËùÓĞÖ¡
+        if (!active) return;  // æœªæ¿€æ´»åˆ™ä¸ç»˜åˆ¶
+        if (frame < maxFrame) {  // æœªæ’­æ”¾å®Œæ‰€æœ‰å¸§
             // Modify the line causing the error to explicitly get the raw pointer from the unique_ptr  
             putimage_alpha(pos.x - frames[frame]->getwidth() / 2, pos.y - frames[frame]->getheight() / 2, frames[frame].get());
-            frame++;  // ÍÆ½øµ½ÏÂÒ»Ö¡
+            frame++;  // æ¨è¿›åˆ°ä¸‹ä¸€å¸§
         }
-        else active = false;  // ²¥·ÅÍêËùÓĞÖ¡£¬±ê¼ÇÎª·Ç¼¤»î
+        else active = false;  // æ’­æ”¾å®Œæ‰€æœ‰å¸§ï¼Œæ ‡è®°ä¸ºéæ¿€æ´»
     }
 
-    bool IsActive() { return active; }  // ·µ»Ø¶¯»­ÊÇ·ñ¼¤»î
+    bool IsActive() { return active; }  // è¿”å›åŠ¨ç”»æ˜¯å¦æ¿€æ´»
 };
 unique_ptr<IMAGE> ExplodeAnimation::frames[ExplodeAnimation::maxFrame];
 
 /**
- * ¿óÊ¯Àà
- * ¹¦ÄÜ£º±íÊ¾ÓÎÏ·ÖĞµÄ¿óÊ¯£¨°üÀ¨½ğ¡¢Ê¯Í·¡¢×êÊ¯µÈ£©£¬¹ÜÀíÆäÊôĞÔºÍ»æÖÆ
+ * çŸ¿çŸ³ç±»
+ * åŠŸèƒ½ï¼šè¡¨ç¤ºæ¸¸æˆä¸­çš„çŸ¿çŸ³ï¼ˆåŒ…æ‹¬é‡‘ã€çŸ³å¤´ã€é’»çŸ³ç­‰ï¼‰ï¼Œç®¡ç†å…¶å±æ€§å’Œç»˜åˆ¶
  */
 class Mine {
 public:
-    POINT pos;          // Î»ÖÃ
-    int type;           // ÀàĞÍ£¨0=½ğ£¬1=Ê¯Í·£¬2=×êÊ¯µÈ£©
-    int value;          // ¼ÛÖµ£¨·ÖÊı£©
-    int damage;         // »·¾³ÆÆ»µ¶È£¨²É¼¯Ê±Ôö¼Ó£©
-    bool alive = true;  // ÊÇ·ñ´æÔÚ£¨Î´±»²É¼¯»ò±¬Õ¨£©
-    IMAGE* img;         // ¿óÊ¯Í¼Æ¬
-    ExplodeAnimation explodeAnim;  // ±¬Õ¨¶¯»­
-    bool isExploding = false;  // ÊÇ·ñÕıÔÚ±¬Õ¨£¨±ÜÃâÖØ¸´´¥·¢£©
-    int pullSpeed;      // ±»¹³×ÓÀ­¶¯µÄËÙ¶È£¨ÖµÔ½Ğ¡Ô½Âı£©
+    POINT pos;          // ä½ç½®
+    int type;           // ç±»å‹ï¼ˆ0=é‡‘ï¼Œ1=çŸ³å¤´ï¼Œ2=é’»çŸ³ç­‰ï¼‰
+    int value;          // ä»·å€¼ï¼ˆåˆ†æ•°ï¼‰
+    int damage;         // ç¯å¢ƒç ´ååº¦ï¼ˆé‡‡é›†æ—¶å¢åŠ ï¼‰
+    bool alive = true;  // æ˜¯å¦å­˜åœ¨ï¼ˆæœªè¢«é‡‡é›†æˆ–çˆ†ç‚¸ï¼‰
+    IMAGE* img;         // çŸ¿çŸ³å›¾ç‰‡
+    ExplodeAnimation explodeAnim;  // çˆ†ç‚¸åŠ¨ç”»
+    bool isExploding = false;  // æ˜¯å¦æ­£åœ¨çˆ†ç‚¸ï¼ˆé¿å…é‡å¤è§¦å‘ï¼‰
+    int pullSpeed;      // è¢«é’©å­æ‹‰åŠ¨çš„é€Ÿåº¦ï¼ˆå€¼è¶Šå°è¶Šæ…¢ï¼‰
 
-    // ¹¹Ôìº¯Êı£º³õÊ¼»¯¿óÊ¯ÊôĞÔ
+    // æ„é€ å‡½æ•°ï¼šåˆå§‹åŒ–çŸ¿çŸ³å±æ€§
     Mine(int x, int y, int t, int v, int d, IMAGE* i, int speed)
         :pos({ x,y }), type(t), value(v), damage(d), img(i), pullSpeed(speed) {
     }
 
     /**
-     * »æÖÆ¿óÊ¯
-     * ¹¦ÄÜ£º»æÖÆ¿óÊ¯Í¼Æ¬£¬ÈôÕıÔÚ±¬Õ¨Ôò»æÖÆ±¬Õ¨¶¯»­
+     * ç»˜åˆ¶çŸ¿çŸ³
+     * åŠŸèƒ½ï¼šç»˜åˆ¶çŸ¿çŸ³å›¾ç‰‡ï¼Œè‹¥æ­£åœ¨çˆ†ç‚¸åˆ™ç»˜åˆ¶çˆ†ç‚¸åŠ¨ç”»
      */
     void Draw() {
-        if (alive) {  // ¿óÊ¯´æÔÚÊ±»æÖÆÍ¼Æ¬
+        if (alive) {  // çŸ¿çŸ³å­˜åœ¨æ—¶ç»˜åˆ¶å›¾ç‰‡
             putimage_alpha(pos.x, pos.y, img);
         }
-        if (isExploding) {  // ÕıÔÚ±¬Õ¨Ê±»æÖÆ¶¯»­
+        if (isExploding) {  // æ­£åœ¨çˆ†ç‚¸æ—¶ç»˜åˆ¶åŠ¨ç”»
             explodeAnim.Draw();
         }
     }
 };
 
 /**
- * ´¦Àí±¬Õ¨·¶Î§
- * @param center ±¬Õ¨ÖĞĞÄ
- * @param mines ¿óÊ¯ÁĞ±í
- * @param envDamage »·¾³ÆÆ»µ¶È£¨ÒıÓÃ£¬ÓÃÓÚÀÛ¼Ó£©
- * ¹¦ÄÜ£º¼ì²â±¬Õ¨·¶Î§ÄÚµÄ¿óÊ¯£¬Ê¹ÆäÏûÊ§²¢Ôö¼ÓÆÆ»µ¶È£¬´¦ÀíÁ´Ê½±¬Õ¨£¨Õ¨µ¯´¥·¢ÆäËûÕ¨µ¯£©
+ * å¤„ç†çˆ†ç‚¸èŒƒå›´
+ * @param center çˆ†ç‚¸ä¸­å¿ƒ
+ * @param mines çŸ¿çŸ³åˆ—è¡¨
+ * @param envDamage ç¯å¢ƒç ´ååº¦ï¼ˆå¼•ç”¨ï¼Œç”¨äºç´¯åŠ ï¼‰
+ * åŠŸèƒ½ï¼šæ£€æµ‹çˆ†ç‚¸èŒƒå›´å†…çš„çŸ¿çŸ³ï¼Œä½¿å…¶æ¶ˆå¤±å¹¶å¢åŠ ç ´ååº¦ï¼Œå¤„ç†é“¾å¼çˆ†ç‚¸ï¼ˆç‚¸å¼¹è§¦å‘å…¶ä»–ç‚¸å¼¹ï¼‰
  */
 void HandleExplosion(POINT center, vector<Mine*>& mines, int& envDamage) {
-    const int EXPLODE_RADIUS = 150;  // ±¬Õ¨°ë¾¶
+    const int EXPLODE_RADIUS = 150;  // çˆ†ç‚¸åŠå¾„
     for (auto& mine : mines) {
-        if (!mine->alive || mine->isExploding) continue;  // Ìø¹ıÒÑÏûÊ§»òÕıÔÚ±¬Õ¨µÄ¿óÊ¯
+        if (!mine->alive || mine->isExploding) continue;  // è·³è¿‡å·²æ¶ˆå¤±æˆ–æ­£åœ¨çˆ†ç‚¸çš„çŸ¿çŸ³
 
-        // ¼ÆËã¿óÊ¯ÖĞĞÄÓë±¬Õ¨ÖĞĞÄµÄ¾àÀë
+        // è®¡ç®—çŸ¿çŸ³ä¸­å¿ƒä¸çˆ†ç‚¸ä¸­å¿ƒçš„è·ç¦»
         int dx = mine->pos.x + mine->img->getwidth() / 2 - center.x;
         int dy = mine->pos.y + mine->img->getheight() / 2 - center.y;
-        // ÓÃÆ½·½¾àÀëÅĞ¶Ï£¨±ÜÃâ¿ª·½£¬Ìá¸ßĞ§ÂÊ£©
+        // ç”¨å¹³æ–¹è·ç¦»åˆ¤æ–­ï¼ˆé¿å…å¼€æ–¹ï¼Œæé«˜æ•ˆç‡ï¼‰
         const int EXPLODE_RADIUS_SQ = EXPLODE_RADIUS * EXPLODE_RADIUS;
         if (dx * dx + dy * dy < EXPLODE_RADIUS_SQ) {
-            if (mine->type == 4) {  // Èô¿óÊ¯ÊÇÕ¨µ¯£¨ÀàĞÍ4£©£¬´¥·¢Á´Ê½±¬Õ¨
-                mine->isExploding = true;  // ±ê¼ÇÎªÕıÔÚ±¬Õ¨
-                mine->alive = false;       // ¿óÊ¯ÏûÊ§
-                // ÒÔµ±Ç°Õ¨µ¯ÎªÖĞĞÄÆô¶¯±¬Õ¨¶¯»­
+            if (mine->type == 4) {  // è‹¥çŸ¿çŸ³æ˜¯ç‚¸å¼¹ï¼ˆç±»å‹4ï¼‰ï¼Œè§¦å‘é“¾å¼çˆ†ç‚¸
+                mine->isExploding = true;  // æ ‡è®°ä¸ºæ­£åœ¨çˆ†ç‚¸
+                mine->alive = false;       // çŸ¿çŸ³æ¶ˆå¤±
+                // ä»¥å½“å‰ç‚¸å¼¹ä¸ºä¸­å¿ƒå¯åŠ¨çˆ†ç‚¸åŠ¨ç”»
                 POINT subCenter = {
                     mine->pos.x + mine->img->getwidth() / 2,
                     mine->pos.y + mine->img->getheight() / 2
                 };
                 mine->explodeAnim.Start(subCenter);
-                envDamage += 10;  // Õ¨µ¯±¬Õ¨Ôö¼Ó10ÆÆ»µ¶È
-                HandleExplosion(subCenter, mines, envDamage);  // µİ¹é´¦ÀíÁ´Ê½±¬Õ¨
+                envDamage += 10;  // ç‚¸å¼¹çˆ†ç‚¸å¢åŠ 10ç ´ååº¦
+                HandleExplosion(subCenter, mines, envDamage);  // é€’å½’å¤„ç†é“¾å¼çˆ†ç‚¸
             }
-            else {  // ·ÇÕ¨µ¯¿óÊ¯£ºÖ±½ÓÏûÊ§²¢Ôö¼ÓÆÆ»µ¶È
+            else {  // éç‚¸å¼¹çŸ¿çŸ³ï¼šç›´æ¥æ¶ˆå¤±å¹¶å¢åŠ ç ´ååº¦
                 mine->alive = false;
                 envDamage += mine->damage;
             }
@@ -520,136 +520,136 @@ void HandleExplosion(POINT center, vector<Mine*>& mines, int& envDamage) {
 }
 
 /**
- * ¹³×ÓÀà
- * ¹¦ÄÜ£º¹ÜÀí¹³×ÓµÄ×´Ì¬£¨°Ú¶¯¡¢·¢Éä¡¢ÊÕ»Ø£©¡¢Óë¿óÊ¯µÄ½»»¥£¨¹´È¡¡¢ÊÍ·Å¡¢Òı±¬£©
+ * é’©å­ç±»
+ * åŠŸèƒ½ï¼šç®¡ç†é’©å­çš„çŠ¶æ€ï¼ˆæ‘†åŠ¨ã€å‘å°„ã€æ”¶å›ï¼‰ã€ä¸çŸ¿çŸ³çš„äº¤äº’ï¼ˆå‹¾å–ã€é‡Šæ”¾ã€å¼•çˆ†ï¼‰
  */
 class Hook {
 private:
-    POINT base{ WIN_WIDTH / 2,80 };  // ¹³×Ó»ù×ùÎ»ÖÃ£¨¶¥²¿ÖĞ¼ä£©
-    double angle = 0;                // °Ú¶¯½Ç¶È£¨¶È£©
-    int dir = 1;                     // °Ú¶¯·½Ïò£¨1=ÓÒ£¬-1=×ó£©
-    int len = 50;                    // ¹³×Ó³¤¶È
-    int hookState = 0;                   // ×´Ì¬£¨0=°Ú¶¯£¬1=·¢ÉäÖĞ£¬2=ÊÕ»ØÖĞ£©
-    int speed = 8;                   // ·¢Éä/ÊÕ»ØËÙ¶È
-    IMAGE* normalImg;                // ÆÕÍ¨¹³×ÓÍ¼Æ¬
-    IMAGE* catchImg;                 // ¹´×¡¿óÊ¯Ê±µÄ¹³×ÓÍ¼Æ¬
-    Mine* caught = nullptr;          // ¹´×¡µÄ¿óÊ¯£¨ nullptr±íÊ¾Î´¹´×¡£©
-    int currentPullSpeed;            // µ±Ç°ÊÕ»ØËÙ¶È£¨ÊÜ¿óÊ¯ÖØÁ¿Ó°Ïì£©
-    bool isCatching = false;         // ÊÇ·ñÕıÔÚ¹´×¡¿óÊ¯
-    ExplodeAnimation explodeAnim;    // ±¬Õ¨¶¯»­
-    vector<Mine*>& mines;            // ÒıÓÃµ±Ç°¹Ø¿¨µÄ¿óÊ¯ÁĞ±í£¨ÓÃÓÚ±¬Õ¨¼ì²â£©
-    GameState& state;  // ÒıÓÃÓÎÏ·×´Ì¬
+    POINT base{ WIN_WIDTH / 2,80 };  // é’©å­åŸºåº§ä½ç½®ï¼ˆé¡¶éƒ¨ä¸­é—´ï¼‰
+    double angle = 0;                // æ‘†åŠ¨è§’åº¦ï¼ˆåº¦ï¼‰
+    int dir = 1;                     // æ‘†åŠ¨æ–¹å‘ï¼ˆ1=å³ï¼Œ-1=å·¦ï¼‰
+    int len = 50;                    // é’©å­é•¿åº¦
+    int hookState = 0;                   // çŠ¶æ€ï¼ˆ0=æ‘†åŠ¨ï¼Œ1=å‘å°„ä¸­ï¼Œ2=æ”¶å›ä¸­ï¼‰
+    int speed = 8;                   // å‘å°„/æ”¶å›é€Ÿåº¦
+    IMAGE* normalImg;                // æ™®é€šé’©å­å›¾ç‰‡
+    IMAGE* catchImg;                 // å‹¾ä½çŸ¿çŸ³æ—¶çš„é’©å­å›¾ç‰‡
+    Mine* caught = nullptr;          // å‹¾ä½çš„çŸ¿çŸ³ï¼ˆ nullptrè¡¨ç¤ºæœªå‹¾ä½ï¼‰
+    int currentPullSpeed;            // å½“å‰æ”¶å›é€Ÿåº¦ï¼ˆå—çŸ¿çŸ³é‡é‡å½±å“ï¼‰
+    bool isCatching = false;         // æ˜¯å¦æ­£åœ¨å‹¾ä½çŸ¿çŸ³
+    ExplodeAnimation explodeAnim;    // çˆ†ç‚¸åŠ¨ç”»
+    vector<Mine*>& mines;            // å¼•ç”¨å½“å‰å…³å¡çš„çŸ¿çŸ³åˆ—è¡¨ï¼ˆç”¨äºçˆ†ç‚¸æ£€æµ‹ï¼‰
+    GameState& state;  // å¼•ç”¨æ¸¸æˆçŠ¶æ€
 public:
-    // ¹¹Ôìº¯Êı£º³õÊ¼»¯¹³×ÓÍ¼Æ¬ºÍ¿óÊ¯ÁĞ±íÒıÓÃ
+    // æ„é€ å‡½æ•°ï¼šåˆå§‹åŒ–é’©å­å›¾ç‰‡å’ŒçŸ¿çŸ³åˆ—è¡¨å¼•ç”¨
     Hook(IMAGE* normal, IMAGE* catchImg, vector<Mine*>& minesRef)
         : state(GameState::Instance()), normalImg(normal), catchImg(catchImg), mines(minesRef) {
     }
 
     /**
-     * ÊÍ·Å¹´×¡µÄ¿óÊ¯
-     * ¹¦ÄÜ£º½«¹´×¡µÄ¿óÊ¯·Å»Ø³¡¾°£¬ÖØÖÃ¹³×Ó×´Ì¬
+     * é‡Šæ”¾å‹¾ä½çš„çŸ¿çŸ³
+     * åŠŸèƒ½ï¼šå°†å‹¾ä½çš„çŸ¿çŸ³æ”¾å›åœºæ™¯ï¼Œé‡ç½®é’©å­çŠ¶æ€
      */
     void Release() {
-        if (hookState == 2 && caught != nullptr) {  // ÕıÔÚÊÕ»ØÇÒ¹´×¡ÁË¿óÊ¯
-            caught->alive = true;  // ¿óÊ¯ÖØĞÂ³öÏÖÔÚ³¡¾°ÖĞ
-            caught = nullptr;      // ¹³×Ó²»ÔÙ¹´×¡¿óÊ¯
-            currentPullSpeed = 8;  // ÖØÖÃÊÕ»ØËÙ¶È
-            isCatching = false;    // ±ê¼ÇÎ´¹´×¡¿óÊ¯
+        if (hookState == 2 && caught != nullptr) {  // æ­£åœ¨æ”¶å›ä¸”å‹¾ä½äº†çŸ¿çŸ³
+            caught->alive = true;  // çŸ¿çŸ³é‡æ–°å‡ºç°åœ¨åœºæ™¯ä¸­
+            caught = nullptr;      // é’©å­ä¸å†å‹¾ä½çŸ¿çŸ³
+            currentPullSpeed = 8;  // é‡ç½®æ”¶å›é€Ÿåº¦
+            isCatching = false;    // æ ‡è®°æœªå‹¾ä½çŸ¿çŸ³
         }
     }
 
     /**
-     * Òı±¬Õ¨µ¯
-     * ¹¦ÄÜ£ºÈô¹´×¡µÄÊÇÕ¨µ¯£¬´¥·¢±¬Õ¨²¢´¦Àí±¬Õ¨·¶Î§
+     * å¼•çˆ†ç‚¸å¼¹
+     * åŠŸèƒ½ï¼šè‹¥å‹¾ä½çš„æ˜¯ç‚¸å¼¹ï¼Œè§¦å‘çˆ†ç‚¸å¹¶å¤„ç†çˆ†ç‚¸èŒƒå›´
      */
     void Explode() {
-        // ¹´×¡ÁËÕ¨µ¯ÇÒÎ´ÕıÔÚ±¬Õ¨
+        // å‹¾ä½äº†ç‚¸å¼¹ä¸”æœªæ­£åœ¨çˆ†ç‚¸
         if (caught && caught->type == 4 && !caught->isExploding) {
-            mciSendString(_T("play audio\\explode.mp3 from 0"), NULL, 0, NULL);  // ²¥·Å±¬Õ¨ÒôĞ§
-            state.envDamage += 10;  // Ôö¼Ó»·¾³ÆÆ»µ¶È
-            POINT e = GetEnd();  // »ñÈ¡¹³×ÓÄ©¶ËÎ»ÖÃ£¨±¬Õ¨ÖĞĞÄ£©
-            explodeAnim.Start(e);  // Æô¶¯±¬Õ¨¶¯»­
+            mciSendString(_T("play audio\\explode.mp3 from 0"), NULL, 0, NULL);  // æ’­æ”¾çˆ†ç‚¸éŸ³æ•ˆ
+            state.envDamage += 10;  // å¢åŠ ç¯å¢ƒç ´ååº¦
+            POINT e = GetEnd();  // è·å–é’©å­æœ«ç«¯ä½ç½®ï¼ˆçˆ†ç‚¸ä¸­å¿ƒï¼‰
+            explodeAnim.Start(e);  // å¯åŠ¨çˆ†ç‚¸åŠ¨ç”»
 
-            // ±ê¼ÇÕ¨µ¯ÎªÕıÔÚ±¬Õ¨
+            // æ ‡è®°ç‚¸å¼¹ä¸ºæ­£åœ¨çˆ†ç‚¸
             caught->isExploding = true;
             caught->alive = false;
-            HandleExplosion(e, mines, state.envDamage);  // ´¦Àí±¬Õ¨·¶Î§ÄÚµÄ¿óÊ¯
+            HandleExplosion(e, mines, state.envDamage);  // å¤„ç†çˆ†ç‚¸èŒƒå›´å†…çš„çŸ¿çŸ³
 
-            // ÖØÖÃ¹³×Ó×´Ì¬
+            // é‡ç½®é’©å­çŠ¶æ€
             caught = nullptr;
             currentPullSpeed = 8;
             isCatching = false;
-            hookState = 2;  // ¼ÌĞøÊÕ»Ø
+            hookState = 2;  // ç»§ç»­æ”¶å›
         }
     }
 
     /**
-     * ¸üĞÂ¹³×Ó×´Ì¬
-     * ¹¦ÄÜ£º¸ù¾İµ±Ç°×´Ì¬£¨°Ú¶¯¡¢·¢Éä¡¢ÊÕ»Ø£©¸üĞÂÎ»ÖÃºÍ½Ç¶È
+     * æ›´æ–°é’©å­çŠ¶æ€
+     * åŠŸèƒ½ï¼šæ ¹æ®å½“å‰çŠ¶æ€ï¼ˆæ‘†åŠ¨ã€å‘å°„ã€æ”¶å›ï¼‰æ›´æ–°ä½ç½®å’Œè§’åº¦
      */
     void Update() {
-        if (hookState == 0) {  // °Ú¶¯×´Ì¬
-            angle += dir;  // ¸Ä±ä½Ç¶È£¨°Ú¶¯£©
-            // µ½´ï×î´ó½Ç¶ÈÊ±·´Ïò
+        if (hookState == 0) {  // æ‘†åŠ¨çŠ¶æ€
+            angle += dir;  // æ”¹å˜è§’åº¦ï¼ˆæ‘†åŠ¨ï¼‰
+            // åˆ°è¾¾æœ€å¤§è§’åº¦æ—¶åå‘
             if (angle > MAX_ANGLE) dir = -1;
             if (angle < -MAX_ANGLE) dir = 1;
         }
-        else if (hookState == 1) {  // ·¢ÉäÖĞ
-            len += speed;  // Ôö¼Ó¹³×Ó³¤¶È£¨ÏòÏÂÑÓÉì£©
-            // ²¥·Å·¢ÉäÒôĞ§£¨½öÒ»´Î£©
+        else if (hookState == 1) {  // å‘å°„ä¸­
+            len += speed;  // å¢åŠ é’©å­é•¿åº¦ï¼ˆå‘ä¸‹å»¶ä¼¸ï¼‰
+            // æ’­æ”¾å‘å°„éŸ³æ•ˆï¼ˆä»…ä¸€æ¬¡ï¼‰
             if (!state.isLaunchBGMPlaying) {
                 mciSendString(_T("play audio\\launch.mp3 from 0"), NULL, 0, NULL);
                 state.isLaunchBGMPlaying = 1;
             }
-            POINT e = GetEnd();  // »ñÈ¡¹³×ÓÄ©¶ËÎ»ÖÃ
-            // ¹³×Ó³¬³ö´°¿Ú·¶Î§Ôò¿ªÊ¼ÊÕ»Ø
+            POINT e = GetEnd();  // è·å–é’©å­æœ«ç«¯ä½ç½®
+            // é’©å­è¶…å‡ºçª—å£èŒƒå›´åˆ™å¼€å§‹æ”¶å›
             if (e.y > WIN_HEIGHT || e.x < 0 || e.x > WIN_WIDTH) {
                 hookState = 2;
                 currentPullSpeed = 8;
             }
         }
-        else if (hookState == 2) {  // ÊÕ»ØÖĞ
-            len -= currentPullSpeed;  // ¼õÉÙ¹³×Ó³¤¶È£¨ÏòÉÏÊÕ»Ø£©
-            state.isLaunchBGMPlaying = 0;   // Í£Ö¹·¢ÉäÒôĞ§±ê¼Ç
+        else if (hookState == 2) {  // æ”¶å›ä¸­
+            len -= currentPullSpeed;  // å‡å°‘é’©å­é•¿åº¦ï¼ˆå‘ä¸Šæ”¶å›ï¼‰
+            state.isLaunchBGMPlaying = 0;   // åœæ­¢å‘å°„éŸ³æ•ˆæ ‡è®°
 
-            if (caught) {  // ¹´×¡¿óÊ¯Ê±£¬¸üĞÂ¿óÊ¯Î»ÖÃ£¨Ëæ¹³×ÓÒÆ¶¯£©
+            if (caught) {  // å‹¾ä½çŸ¿çŸ³æ—¶ï¼Œæ›´æ–°çŸ¿çŸ³ä½ç½®ï¼ˆéšé’©å­ç§»åŠ¨ï¼‰
                 POINT hookPos = GetEnd();
-                caught->pos.x = hookPos.x - caught->img->getwidth() / 2;  // ¿óÊ¯ÖĞĞÄÓë¹³×Ó¶ÔÆë
+                caught->pos.x = hookPos.x - caught->img->getwidth() / 2;  // çŸ¿çŸ³ä¸­å¿ƒä¸é’©å­å¯¹é½
                 caught->pos.y = hookPos.y - 10;
-                // ÌØÊâ¿óÊ¯µÄÎ»ÖÃÎ¢µ÷
-                if (caught->type == 0) caught->pos.y += 10;  // ½ğ¿óÊ¯
-                if (caught->type == 2) caught->pos.y += 5;   // ×êÊ¯
+                // ç‰¹æ®ŠçŸ¿çŸ³çš„ä½ç½®å¾®è°ƒ
+                if (caught->type == 0) caught->pos.y += 10;  // é‡‘çŸ¿çŸ³
+                if (caught->type == 2) caught->pos.y += 5;   // é’»çŸ³
             }
 
-            // ¹³×ÓÊÕ»ØÖÁ³õÊ¼³¤¶È
+            // é’©å­æ”¶å›è‡³åˆå§‹é•¿åº¦
             if (len <= 50) {
-                len = 50;  // ÖØÖÃ³¤¶È
-                if (caught) {  // ¹´×¡¿óÊ¯ÇÒÒÑÊÕ»ØÖÁ¶¥²¿
-                    state.totalScore += caught->value;  // Ôö¼Ó·ÖÊı
-                    state.envDamage += caught->damage;  // Ôö¼Ó»·¾³ÆÆ»µ¶È
+                len = 50;  // é‡ç½®é•¿åº¦
+                if (caught) {  // å‹¾ä½çŸ¿çŸ³ä¸”å·²æ”¶å›è‡³é¡¶éƒ¨
+                    state.totalScore += caught->value;  // å¢åŠ åˆ†æ•°
+                    state.envDamage += caught->damage;  // å¢åŠ ç¯å¢ƒç ´ååº¦
 
-                    // ½âËø¶ÔÓ¦³É¾Í
-                    if (!state.achieve_first) state.achieve_first = true;  // Ê×´Î¿ª²É
-                    if (caught->type == 3 && !state.achieve_screw) state.achieve_screw = true;  // Ê³ÌÃÂİË¿
-                    if (caught->type == 4 && !state.achieve_bomb) state.achieve_bomb = true;    // Õ¨Ò©
+                    // è§£é”å¯¹åº”æˆå°±
+                    if (!state.achieve_first) state.achieve_first = true;  // é¦–æ¬¡å¼€é‡‡
+                    if (caught->type == 3 && !state.achieve_screw) state.achieve_screw = true;  // é£Ÿå ‚èºä¸
+                    if (caught->type == 4 && !state.achieve_bomb) state.achieve_bomb = true;    // ç‚¸è¯
 
-                    mciSendString(_T("play audio\\score.mp3 from 0"), NULL, 0, NULL);  // ²¥·Å»ñÈ¡ÒôĞ§
-                    caught->alive = false;  // ¿óÊ¯ÏûÊ§
-                    caught = nullptr;       // ¹³×Ó²»ÔÙ¹´×¡¿óÊ¯
-                    isCatching = false;     // ±ê¼ÇÎ´¹´×¡
+                    mciSendString(_T("play audio\\score.mp3 from 0"), NULL, 0, NULL);  // æ’­æ”¾è·å–éŸ³æ•ˆ
+                    caught->alive = false;  // çŸ¿çŸ³æ¶ˆå¤±
+                    caught = nullptr;       // é’©å­ä¸å†å‹¾ä½çŸ¿çŸ³
+                    isCatching = false;     // æ ‡è®°æœªå‹¾ä½
                 }
-                hookState = 0;  // »Øµ½°Ú¶¯×´Ì¬
+                hookState = 0;  // å›åˆ°æ‘†åŠ¨çŠ¶æ€
             }
         }
     }
 
     /**
-     * »ñÈ¡¹³×ÓÄ©¶ËÎ»ÖÃ
-     * ¹¦ÄÜ£º¸ù¾İµ±Ç°½Ç¶ÈºÍ³¤¶È¼ÆËã¹³×ÓÄ©¶Ë×ø±ê
+     * è·å–é’©å­æœ«ç«¯ä½ç½®
+     * åŠŸèƒ½ï¼šæ ¹æ®å½“å‰è§’åº¦å’Œé•¿åº¦è®¡ç®—é’©å­æœ«ç«¯åæ ‡
      */
     POINT GetEnd() {
-        double r = angle * 3.1415926 / 180.0;  // ½Ç¶È×ª»¡¶È
-        // ÀûÓÃÈı½Çº¯Êı¼ÆËãÄ©¶ËÎ»ÖÃ£¨»ù×ùÎªÆğµã£©
+        double r = angle * 3.1415926 / 180.0;  // è§’åº¦è½¬å¼§åº¦
+        // åˆ©ç”¨ä¸‰è§’å‡½æ•°è®¡ç®—æœ«ç«¯ä½ç½®ï¼ˆåŸºåº§ä¸ºèµ·ç‚¹ï¼‰
         return {
             base.x + (int)(sin(r) * len),
             base.y + (int)(cos(r) * len)
@@ -657,164 +657,164 @@ public:
     }
 
     /**
-     * »æÖÆ¹³×Ó
-     * ¹¦ÄÜ£º»æÖÆ¹³×ÓÏßºÍ¹³×ÓÍ¼Æ¬£¬Èô¹´×¡¿óÊ¯Ôò»æÖÆ¿óÊ¯
+     * ç»˜åˆ¶é’©å­
+     * åŠŸèƒ½ï¼šç»˜åˆ¶é’©å­çº¿å’Œé’©å­å›¾ç‰‡ï¼Œè‹¥å‹¾ä½çŸ¿çŸ³åˆ™ç»˜åˆ¶çŸ¿çŸ³
      */
     void Draw() {
-        POINT e = GetEnd();  // »ñÈ¡Ä©¶ËÎ»ÖÃ
-        if (caught) {  // ¹´×¡¿óÊ¯Ê±»æÖÆ¿óÊ¯
+        POINT e = GetEnd();  // è·å–æœ«ç«¯ä½ç½®
+        if (caught) {  // å‹¾ä½çŸ¿çŸ³æ—¶ç»˜åˆ¶çŸ¿çŸ³
             caught->Draw();
         }
-        // »æÖÆ¹³×ÓÏß£¨´Ó»ù×ùµ½Ä©¶Ë£©
+        // ç»˜åˆ¶é’©å­çº¿ï¼ˆä»åŸºåº§åˆ°æœ«ç«¯ï¼‰
         setlinecolor(BLACK);
         setlinestyle(PS_SOLID, 5);
         line(base.x, base.y, e.x, e.y);
-        // Ñ¡Ôñ¹³×ÓÍ¼Æ¬£¨¹´×¡/Î´¹´×¡£©
+        // é€‰æ‹©é’©å­å›¾ç‰‡ï¼ˆå‹¾ä½/æœªå‹¾ä½ï¼‰
         IMAGE* currentImg = isCatching ? catchImg : normalImg;
-        // ¼ÆËã¹³×ÓÍ¼Æ¬Æ«ÒÆ£¨Ê¹Í¼Æ¬ÖĞĞÄÓëÄ©¶Ë¶ÔÆë£©
+        // è®¡ç®—é’©å­å›¾ç‰‡åç§»ï¼ˆä½¿å›¾ç‰‡ä¸­å¿ƒä¸æœ«ç«¯å¯¹é½ï¼‰
         int offsetX = -currentImg->getwidth() / 2;
         int offsetY = -currentImg->getheight() / 2 + 7;
-        if (isCatching) offsetY += 5;  // ¹´×¡Ê±Î¢µ÷Î»ÖÃ
-        // »æÖÆ¹³×ÓÍ¼Æ¬
+        if (isCatching) offsetY += 5;  // å‹¾ä½æ—¶å¾®è°ƒä½ç½®
+        // ç»˜åˆ¶é’©å­å›¾ç‰‡
         putimage_alpha(e.x + offsetX, e.y + offsetY, currentImg);
-        // »æÖÆ±¬Õ¨¶¯»­£¨ÈôÓĞ£©
+        // ç»˜åˆ¶çˆ†ç‚¸åŠ¨ç”»ï¼ˆè‹¥æœ‰ï¼‰
         explodeAnim.Draw();
     }
 
     /**
-     * ·¢Éä¹³×Ó
-     * ¹¦ÄÜ£º´Ó°Ú¶¯×´Ì¬ÇĞ»»Îª·¢Éä×´Ì¬
+     * å‘å°„é’©å­
+     * åŠŸèƒ½ï¼šä»æ‘†åŠ¨çŠ¶æ€åˆ‡æ¢ä¸ºå‘å°„çŠ¶æ€
      */
     void Launch() { if (hookState == 0) hookState = 1; }
 
     /**
-     * ¼ì²âÊÇ·ñ¹´×¡¿óÊ¯
-     * @param m ¿óÊ¯¶ÔÏó
-     * ¹¦ÄÜ£ºÅĞ¶Ï¹³×ÓÄ©¶ËÊÇ·ñÓë¿óÊ¯Åö×²£¬ÈôÊÇÔò¹´×¡¿óÊ¯
+     * æ£€æµ‹æ˜¯å¦å‹¾ä½çŸ¿çŸ³
+     * @param m çŸ¿çŸ³å¯¹è±¡
+     * åŠŸèƒ½ï¼šåˆ¤æ–­é’©å­æœ«ç«¯æ˜¯å¦ä¸çŸ¿çŸ³ç¢°æ’ï¼Œè‹¥æ˜¯åˆ™å‹¾ä½çŸ¿çŸ³
      */
     bool Hooking(Mine* m) {
-        if (caught) return false;  // ÒÑ¹´×¡¿óÊ¯Ôò·µ»Ø
-        POINT e = GetEnd();  // ¹³×ÓÄ©¶ËÎ»ÖÃ
-        // ¿óÊ¯¿í¸ßµÄÒ»°ë£¨ÓÃÓÚÅö×²¼ì²â£©
+        if (caught) return false;  // å·²å‹¾ä½çŸ¿çŸ³åˆ™è¿”å›
+        POINT e = GetEnd();  // é’©å­æœ«ç«¯ä½ç½®
+        // çŸ¿çŸ³å®½é«˜çš„ä¸€åŠï¼ˆç”¨äºç¢°æ’æ£€æµ‹ï¼‰
         int mw = m->img->getwidth(), mh = m->img->getheight();
-        // ¼ì²â¹³×ÓÄ©¶ËÊÇ·ñÔÚ¿óÊ¯·¶Î§ÄÚ£¨¼òµ¥Åö×²¼ì²â£©
+        // æ£€æµ‹é’©å­æœ«ç«¯æ˜¯å¦åœ¨çŸ¿çŸ³èŒƒå›´å†…ï¼ˆç®€å•ç¢°æ’æ£€æµ‹ï¼‰
         if (m->alive && abs(e.x - (m->pos.x + mw / 2)) < mw / 2 && abs(e.y - (m->pos.y + mh / 2)) < mh / 2) {
-            caught = m;                // ¹´×¡¿óÊ¯
-            currentPullSpeed = m->pullSpeed;  // Éè¶¨ÊÕ»ØËÙ¶È£¨¿óÊ¯Ô½ÖØËÙ¶ÈÔ½Âı£©
-            mciSendString(_T("play audio\\hit.mp3 from 0"), NULL, 0, NULL);  // ²¥·ÅÅö×²ÒôĞ§
-            hookState = 2;                 // ÇĞ»»ÎªÊÕ»Ø×´Ì¬
-            isCatching = true;         // ±ê¼ÇÕıÔÚ¹´×¡
+            caught = m;                // å‹¾ä½çŸ¿çŸ³
+            currentPullSpeed = m->pullSpeed;  // è®¾å®šæ”¶å›é€Ÿåº¦ï¼ˆçŸ¿çŸ³è¶Šé‡é€Ÿåº¦è¶Šæ…¢ï¼‰
+            mciSendString(_T("play audio\\hit.mp3 from 0"), NULL, 0, NULL);  // æ’­æ”¾ç¢°æ’éŸ³æ•ˆ
+            hookState = 2;                 // åˆ‡æ¢ä¸ºæ”¶å›çŠ¶æ€
+            isCatching = true;         // æ ‡è®°æ­£åœ¨å‹¾ä½
             return true;
         }
         return false;
     }
 
     /**
-     * ÅĞ¶Ï¹³×ÓÊÇ·ñÕıÔÚÊÕ»Ø
-     * ¹¦ÄÜ£ºÓÃÓÚ¿ØÖÆ¿óÊ¯Éú³ÉÊ±»ú£¨ÊÕ»ØÊ±²»Éú³ÉĞÂ¿óÊ¯£©
+     * åˆ¤æ–­é’©å­æ˜¯å¦æ­£åœ¨æ”¶å›
+     * åŠŸèƒ½ï¼šç”¨äºæ§åˆ¶çŸ¿çŸ³ç”Ÿæˆæ—¶æœºï¼ˆæ”¶å›æ—¶ä¸ç”Ÿæˆæ–°çŸ¿çŸ³ï¼‰
      */
     bool Retracting() { return hookState == 2; }
 };
 
 /**
- * ²É¿óÓÎÏ·Àà
- * ¹¦ÄÜ£º¹ÜÀíµ¥¸ö¹Ø¿¨µÄÓÎÏ·Âß¼­£¨¿óÊ¯Éú³É¡¢¸üĞÂ¡¢»æÖÆ¡¢ÊäÈë´¦Àí£©
+ * é‡‡çŸ¿æ¸¸æˆç±»
+ * åŠŸèƒ½ï¼šç®¡ç†å•ä¸ªå…³å¡çš„æ¸¸æˆé€»è¾‘ï¼ˆçŸ¿çŸ³ç”Ÿæˆã€æ›´æ–°ã€ç»˜åˆ¶ã€è¾“å…¥å¤„ç†ï¼‰
  */
 class MinerGame {
 private:
-    vector<Mine*> mines;  // ¿óÊ¯ÁĞ±í
-    Hook* hook;           // ¹³×Ó¶ÔÏó
-    IMAGE* bg;            // ¹Ø¿¨±³¾°Í¼
-    ULONGLONG lastTimeCheck;  // ÉÏÒ»´Î¼ì²éÊ±¼ä£¨ÓÃÓÚµ¹¼ÆÊ±£©
-    GameState& state;  // ÒıÓÃÓÎÏ·×´Ì¬
-    int level;            // µ±Ç°¹Ø¿¨ºÅ
-    bool levelOver = false;  // µ¥¸ö¹Ø¿¨ÊÇ·ñ½áÊø
+    vector<Mine*> mines;  // çŸ¿çŸ³åˆ—è¡¨
+    Hook* hook;           // é’©å­å¯¹è±¡
+    IMAGE* bg;            // å…³å¡èƒŒæ™¯å›¾
+    ULONGLONG lastTimeCheck;  // ä¸Šä¸€æ¬¡æ£€æŸ¥æ—¶é—´ï¼ˆç”¨äºå€’è®¡æ—¶ï¼‰
+    GameState& state;  // å¼•ç”¨æ¸¸æˆçŠ¶æ€
+    int level;            // å½“å‰å…³å¡å·
+    bool levelOver = false;  // å•ä¸ªå…³å¡æ˜¯å¦ç»“æŸ
 
 public:
     /**
-     * ¹¹Ôìº¯Êı
-     * @param b ±³¾°Í¼
-     * @param normalHook ÆÕÍ¨¹³×ÓÍ¼Æ¬
-     * @param catchHook ¹´×¡Ê±µÄ¹³×ÓÍ¼Æ¬
-     * @param imgs ¿óÊ¯Í¼Æ¬ÁĞ±í
-     * @param level ¹Ø¿¨ºÅ
-     * ¹¦ÄÜ£º³õÊ¼»¯¹Ø¿¨£¨Éú³É¿óÊ¯¡¢¹³×Ó£©
+     * æ„é€ å‡½æ•°
+     * @param b èƒŒæ™¯å›¾
+     * @param normalHook æ™®é€šé’©å­å›¾ç‰‡
+     * @param catchHook å‹¾ä½æ—¶çš„é’©å­å›¾ç‰‡
+     * @param imgs çŸ¿çŸ³å›¾ç‰‡åˆ—è¡¨
+     * @param level å…³å¡å·
+     * åŠŸèƒ½ï¼šåˆå§‹åŒ–å…³å¡ï¼ˆç”ŸæˆçŸ¿çŸ³ã€é’©å­ï¼‰
      */
     MinerGame(IMAGE* b, IMAGE* normalHook, IMAGE* catchHook, vector<IMAGE*> imgs, int level) : bg(b), state(GameState::Instance()), level(level) {
-        hook = new Hook(normalHook, catchHook, mines);  // ´´½¨¹³×Ó£¨´«Èë¿óÊ¯ÁĞ±íÒıÓÃ£©
-        srand((unsigned)time(nullptr));  // Ëæ»úÊıÖÖ×Ó
-        lastTimeCheck = GetTickCount64();  // ³õÊ¼»¯µ¹¼ÆÊ±¼ì²éÊ±¼ä
-        // ÉèÖÃµ±Ç°¹Ø¿¨µÄÊ±¼ä
+        hook = new Hook(normalHook, catchHook, mines);  // åˆ›å»ºé’©å­ï¼ˆä¼ å…¥çŸ¿çŸ³åˆ—è¡¨å¼•ç”¨ï¼‰
+        srand((unsigned)time(nullptr));  // éšæœºæ•°ç§å­
+        lastTimeCheck = GetTickCount64();  // åˆå§‹åŒ–å€’è®¡æ—¶æ£€æŸ¥æ—¶é—´
+        // è®¾ç½®å½“å‰å…³å¡çš„æ—¶é—´
         state.gameTime = state.levelTimes[level - 1];
-        // ÉèÖÃµ±Ç°¹Ø¿¨µÄ»ù´¡µô·Ö
+        // è®¾ç½®å½“å‰å…³å¡çš„åŸºç¡€æ‰åˆ†
         state.baseScoreReduction = level * 4;
-        // ¸÷¹Ø¿¨¿óÊ¯ÊıÁ¿£¨¸ù¾İ¹Ø¿¨ÄÑ¶Èµ÷Õû£©
+        // å„å…³å¡çŸ¿çŸ³æ•°é‡ï¼ˆæ ¹æ®å…³å¡éš¾åº¦è°ƒæ•´ï¼‰
         int countGold = 0, countStone = 0, countDiamond = 0, countScrew = 0, countBomb = 0, countCoal = 0, countIron = 0;
-        if (level == 1) {  // µÚÒ»¹Ø£º»ù´¡¿óÊ¯
+        if (level == 1) {  // ç¬¬ä¸€å…³ï¼šåŸºç¡€çŸ¿çŸ³
             countStone = 4; countBomb = 2; countScrew = 6; countGold = 0; countCoal = 3; countIron = 0;
         }
-        else if (level == 2) {  // µÚ¶ş¹Ø£ºÔö¼Ó¼ÛÖµ½Ï¸ßµÄ¿óÊ¯
+        else if (level == 2) {  // ç¬¬äºŒå…³ï¼šå¢åŠ ä»·å€¼è¾ƒé«˜çš„çŸ¿çŸ³
             countStone = 4; countGold = 2; countScrew = 4; countDiamond = 0; countBomb = 4; countCoal = 4; countIron = 2;
         }
-        else if (level == 3) {  // µÚÈı¹Ø£ºÔö¼Ó×êÊ¯ºÍÌú¿ó
+        else if (level == 3) {  // ç¬¬ä¸‰å…³ï¼šå¢åŠ é’»çŸ³å’Œé“çŸ¿
             countStone = 6; countGold = 3; countDiamond = 2; countBomb = 8; countCoal = 2; countIron = 4; countScrew = 0;
         }
-        else if (level == 4) {  // µÚËÄ¹Ø£º¸ß¼ÛÖµ¿óÊ¯ÎªÖ÷
+        else if (level == 4) {  // ç¬¬å››å…³ï¼šé«˜ä»·å€¼çŸ¿çŸ³ä¸ºä¸»
             countStone = 6; countGold = 4; countDiamond = 3; countBomb = 8; countCoal = 0; countIron = 2; countScrew = 0;
         }
-        else if (level == 5) {  // µÚÎå¹Ø£º×î¸ßÄÑ¶È
+        else if (level == 5) {  // ç¬¬äº”å…³ï¼šæœ€é«˜éš¾åº¦
             countStone = 8; countGold = 6; countDiamond = 4; countBomb = 8; countCoal = 0; countIron = 0; countScrew = 0;
         }
 
-        // ¹³×Ó»ù×ùÎ»ÖÃ£¨ÓÃÓÚ¿óÊ¯Éú³ÉµÄ°²È«¾àÀë¼ÆËã£©
+        // é’©å­åŸºåº§ä½ç½®ï¼ˆç”¨äºçŸ¿çŸ³ç”Ÿæˆçš„å®‰å…¨è·ç¦»è®¡ç®—ï¼‰
         POINT hookBase = { WIN_WIDTH / 2, 80 };
-        // °²È«¾àÀë£ºÀë¹³×ÓÖÁÉÙ150ÏñËØ£¬¿óÊ¯Ö®¼äÖÁÉÙ64ÏñËØ
+        // å®‰å…¨è·ç¦»ï¼šç¦»é’©å­è‡³å°‘150åƒç´ ï¼ŒçŸ¿çŸ³ä¹‹é—´è‡³å°‘64åƒç´ 
         const int SAFE_DISTANCE_TO_HOOK = 150;
         const int SAFE_DISTANCE_BETWEEN_MINES = 64;
 
-        // ¿óÊ¯Éú³Éº¯Êı£¨lambda±í´ïÊ½£¬¼ò»¯ÖØ¸´´úÂë£©
+        // çŸ¿çŸ³ç”Ÿæˆå‡½æ•°ï¼ˆlambdaè¡¨è¾¾å¼ï¼Œç®€åŒ–é‡å¤ä»£ç ï¼‰
         auto spawn = [&](int type, int count) {
             for (int i = 0; i < count; i++) {
                 int x, y;
                 bool ok;
                 do {
                     ok = true;
-                    // Ëæ»úÉú³ÉÎ»ÖÃ£¨´°¿Ú·¶Î§ÄÚ£©
+                    // éšæœºç”Ÿæˆä½ç½®ï¼ˆçª—å£èŒƒå›´å†…ï¼‰
                     x = rand() % (WIN_WIDTH - 64);
                     y = rand() % (WIN_HEIGHT - 200) + 150;
 
-                    // ¼ì²éÊÇ·ñÀë¹³×ÓÌ«½ü
+                    // æ£€æŸ¥æ˜¯å¦ç¦»é’©å­å¤ªè¿‘
                     if (sqrt(pow(x - hookBase.x, 2) + pow(y - hookBase.y, 2)) < SAFE_DISTANCE_TO_HOOK) {
                         ok = false;
                         continue;
                     }
 
-                    // ¼ì²éÊÇ·ñÓëÆäËû¿óÊ¯Ì«½ü
+                    // æ£€æŸ¥æ˜¯å¦ä¸å…¶ä»–çŸ¿çŸ³å¤ªè¿‘
                     for (auto m : mines) {
                         if (sqrt(pow(x - m->pos.x, 2) + pow(y - m->pos.y, 2)) < SAFE_DISTANCE_BETWEEN_MINES) {
                             ok = false;
                             break;
                         }
                     }
-                } while (!ok);  // Ö±µ½Éú³ÉºÏ·¨Î»ÖÃ
+                } while (!ok);  // ç›´åˆ°ç”Ÿæˆåˆæ³•ä½ç½®
 
-                // ¸ù¾İ¿óÊ¯ÀàĞÍÉèÖÃÊôĞÔ£¨¼ÛÖµ¡¢ÆÆ»µ¶È¡¢ÊÕ»ØËÙ¶È£©
+                // æ ¹æ®çŸ¿çŸ³ç±»å‹è®¾ç½®å±æ€§ï¼ˆä»·å€¼ã€ç ´ååº¦ã€æ”¶å›é€Ÿåº¦ï¼‰
                 int v, d, speed;
                 switch (type) {
-                case 0: v = 500; d = 3; speed = 4; break;  // ½ğ
-                case 1: v = 50; d = 5; speed = 2; break;   // Ê¯Í·
-                case 2: v = 1000; d = 2; speed = 8; break; // ×êÊ¯
-                case 3: v = 1; d = 1; speed = 8; break;    // ÂİË¿
-                case 4: v = 0; d = 1; speed = 7; break;    // Õ¨µ¯
-                case 5: v = 200; d = 3; speed = 4; break;  // Ãº¿ó
-                case 6: v = 300; d = 3; speed = 5; break;  // Ìú¿ó
+                case 0: v = 500; d = 3; speed = 4; break;  // é‡‘
+                case 1: v = 50; d = 5; speed = 2; break;   // çŸ³å¤´
+                case 2: v = 1000; d = 2; speed = 8; break; // é’»çŸ³
+                case 3: v = 1; d = 1; speed = 8; break;    // èºä¸
+                case 4: v = 0; d = 1; speed = 7; break;    // ç‚¸å¼¹
+                case 5: v = 200; d = 3; speed = 4; break;  // ç…¤çŸ¿
+                case 6: v = 300; d = 3; speed = 5; break;  // é“çŸ¿
                 }
-                // Ìí¼Ó¿óÊ¯µ½ÁĞ±í
+                // æ·»åŠ çŸ¿çŸ³åˆ°åˆ—è¡¨
                 mines.push_back(new Mine(x, y, type, v, d, imgs[type], speed));
             }
             };
 
-        // Éú³É¸÷ÀàĞÍ¿óÊ¯
+        // ç”Ÿæˆå„ç±»å‹çŸ¿çŸ³
         spawn(0, countGold);
         spawn(1, countStone);
         spawn(2, countDiamond);
@@ -825,185 +825,185 @@ public:
     }
 
     /**
-     * Îö¹¹º¯Êı
-     * ¹¦ÄÜ£ºÊÍ·Å¹³×ÓºÍ¿óÊ¯µÄÄÚ´æ
+     * ææ„å‡½æ•°
+     * åŠŸèƒ½ï¼šé‡Šæ”¾é’©å­å’ŒçŸ¿çŸ³çš„å†…å­˜
      */
     ~MinerGame() {
         delete hook;
-        for (auto m : mines) delete m;  // ÊÍ·ÅËùÓĞ¿óÊ¯
+        for (auto m : mines) delete m;  // é‡Šæ”¾æ‰€æœ‰çŸ¿çŸ³
     }
 
     /**
-     * ¸üĞÂÓÎÏ·×´Ì¬
-     * ¹¦ÄÜ£º¸üĞÂµ¹¼ÆÊ±¡¢¹³×Ó×´Ì¬¡¢¿óÊ¯Åö×²¼ì²â
+     * æ›´æ–°æ¸¸æˆçŠ¶æ€
+     * åŠŸèƒ½ï¼šæ›´æ–°å€’è®¡æ—¶ã€é’©å­çŠ¶æ€ã€çŸ¿çŸ³ç¢°æ’æ£€æµ‹
      */
     void Update() {
-        // µ¹¼ÆÊ±Âß¼­£¨Ã¿Ãë¼õÉÙ1£©
+        // å€’è®¡æ—¶é€»è¾‘ï¼ˆæ¯ç§’å‡å°‘1ï¼‰
         ULONGLONG now = GetTickCount64();
-        if (now - lastTimeCheck >= 1000 && !state.gameOver) {  // ¼ä¸ô1Ãë
+        if (now - lastTimeCheck >= 1000 && !state.gameOver) {  // é—´éš”1ç§’
             state.gameTime--;
             lastTimeCheck = now;
             if(state.totalScore>3000)
             state.totalScore = max(0, state.totalScore - state.baseScoreReduction);
-            // ×îºó10Ãë²¥·ÅÌáÊ¾ÒôĞ§
+            // æœ€å10ç§’æ’­æ”¾æç¤ºéŸ³æ•ˆ
             if (state.gameTime <= 10 && state.gameTime > 0 && !state.isTimeupBGMPlaying) {
                 state.isTimeupBGMPlaying = 1;
                 mciSendString(_T("play audio\\last-10s-sound.mp3 from 0"), NULL, 0, NULL);
             }
-            // Ê±¼ä½áÊø£¬¹Ø¿¨½áÊø
+            // æ—¶é—´ç»“æŸï¼Œå…³å¡ç»“æŸ
             if (state.gameTime <= 0) {
                 state.isTimeupBGMPlaying = 0;
                 levelOver = true;
             }
         }
 
-        if (!levelOver) {  // ¹Ø¿¨Î´½áÊøÔò¸üĞÂ
-            hook->Update();  // ¸üĞÂ¹³×Ó
-            if (hook->Retracting() || state.gameOver) return;  // ÊÕ»ØÊ±²»¼ì²âÅö×²
-            // ¼ì²â¹³×ÓÊÇ·ñ¹´×¡¿óÊ¯
+        if (!levelOver) {  // å…³å¡æœªç»“æŸåˆ™æ›´æ–°
+            hook->Update();  // æ›´æ–°é’©å­
+            if (hook->Retracting() || state.gameOver) return;  // æ”¶å›æ—¶ä¸æ£€æµ‹ç¢°æ’
+            // æ£€æµ‹é’©å­æ˜¯å¦å‹¾ä½çŸ¿çŸ³
             for (auto m : mines) if (hook->Hooking(m)) break;
         }
     }
 
     /**
-     * »æÖÆÓÎÏ·»­Ãæ
-     * ¹¦ÄÜ£º»æÖÆ±³¾°¡¢¿óÊ¯¡¢¹³×Ó¡¢·ÖÊı¡¢Ê±¼ä¡¢ÆÆ»µ¶È£¬´¦Àí¹Ø¿¨½áÊøºÍ½á¾Ö
+     * ç»˜åˆ¶æ¸¸æˆç”»é¢
+     * åŠŸèƒ½ï¼šç»˜åˆ¶èƒŒæ™¯ã€çŸ¿çŸ³ã€é’©å­ã€åˆ†æ•°ã€æ—¶é—´ã€ç ´ååº¦ï¼Œå¤„ç†å…³å¡ç»“æŸå’Œç»“å±€
      */
     void Draw() {
-        // »æÖÆ±³¾°
+        // ç»˜åˆ¶èƒŒæ™¯
         StretchBlt(GetImageHDC(NULL), 0, 0, WIN_WIDTH, WIN_HEIGHT,
             GetImageHDC(bg), 0, 0, bg->getwidth(), bg->getheight(), SRCCOPY);
 
-        // »æÖÆ¿óÊ¯
+        // ç»˜åˆ¶çŸ¿çŸ³
         for (auto m : mines) {
             if (m->alive) m->Draw();
         }
-        // »æÖÆ±¬Õ¨¶¯»­£¨È·±£ÔÚ¿óÊ¯ÉÏ·½£©
+        // ç»˜åˆ¶çˆ†ç‚¸åŠ¨ç”»ï¼ˆç¡®ä¿åœ¨çŸ¿çŸ³ä¸Šæ–¹ï¼‰
         for (auto m : mines) {
             if (m->isExploding) m->explodeAnim.Draw();
         }
 
-        // »æÖÆ¹³×Ó
+        // ç»˜åˆ¶é’©å­
         hook->Draw();
 
-        // ÏÔÊ¾·ÖÊı¡¢Ê±¼ä¡¢»·¾³ÆÆ»µ¶È
+        // æ˜¾ç¤ºåˆ†æ•°ã€æ—¶é—´ã€ç¯å¢ƒç ´ååº¦
         TCHAR buf[64];
         settextcolor(BLACK);
-        settextstyle(30, 0, _T("Î¢ÈíÑÅºÚ"));
+        settextstyle(30, 0, _T("å¾®è½¯é›…é»‘"));
 
-        _stprintf_s(buf, _T("·ÖÊı£º%d"), state.totalScore);
-        outtextxy(20, 20, buf);  // ×óÉÏ½Ç
+        _stprintf_s(buf, _T("åˆ†æ•°ï¼š%d"), state.totalScore);
+        outtextxy(20, 20, buf);  // å·¦ä¸Šè§’
 
-        _stprintf_s(buf, _T("Ê±¼ä£º%d Ãë"), state.gameTime);
+        _stprintf_s(buf, _T("æ—¶é—´ï¼š%d ç§’"), state.gameTime);
         outtextxy(20, 60, buf);
 
-        _stprintf_s(buf, _T("»·¾³ÆÆ»µ¶È£º%d"), state.envDamage);
+        _stprintf_s(buf, _T("ç¯å¢ƒç ´ååº¦ï¼š%d"), state.envDamage);
         outtextxy(20, 100, buf);
 
-        // ¹Ø¿¨½áÊø´¦Àí
+        // å…³å¡ç»“æŸå¤„ç†
         if (levelOver) {
-            mciSendString(_T("stop mining"), NULL, 0, NULL);  // Í£Ö¹¹Ø¿¨ÒôÀÖ
+            mciSendString(_T("stop mining"), NULL, 0, NULL);  // åœæ­¢å…³å¡éŸ³ä¹
             ULONGLONG showStart = GetTickCount64();
-            const int showDuration = 3000;  // ÏÔÊ¾3Ãë¹Ø¿¨½áÊøÌáÊ¾
+            const int showDuration = 3000;  // æ˜¾ç¤º3ç§’å…³å¡ç»“æŸæç¤º
 
-            mciSendString(_T("play audio\\timeup.mp3 from 0"), NULL, 0, NULL);  // ²¥·ÅÊ±¼äµ½ÒôĞ§
+            mciSendString(_T("play audio\\timeup.mp3 from 0"), NULL, 0, NULL);  // æ’­æ”¾æ—¶é—´åˆ°éŸ³æ•ˆ
 
-            // ÏÔÊ¾¹Ø¿¨½áÊøÌáÊ¾
+            // æ˜¾ç¤ºå…³å¡ç»“æŸæç¤º
             while (GetTickCount64() - showStart < showDuration) {
                 StretchBlt(GetImageHDC(NULL), 0, 0, WIN_WIDTH, WIN_HEIGHT,
                     GetImageHDC(bg), 0, 0, bg->getwidth(), bg->getheight(), SRCCOPY);
                 for (auto m : mines) if (m->alive) m->Draw();
                 hook->Draw();
 
-                // ÏÔÊ¾ÌáÊ¾ÎÄ×Ö
+                // æ˜¾ç¤ºæç¤ºæ–‡å­—
                 setbkmode(TRANSPARENT);
-                settextstyle(80, 0, _T("Î¢ÈíÑÅºÚ"));
+                settextstyle(80, 0, _T("å¾®è½¯é›…é»‘"));
                 settextcolor(RED);
                 const TCHAR* text = (level < state.MAX_LEVEL) ?
-                    _T("Time is up!\n¼´½«½øÈë¸üÉî²ãÌ½Ë÷......") :  // ·Ç×îºóÒ»¹Ø
-                    _T("Time is up!\nÓÎÏ·½áÊø!");  // ×îºóÒ»¹Ø
+                    _T("Time is up!\nå³å°†è¿›å…¥æ›´æ·±å±‚æ¢ç´¢......") :  // éæœ€åä¸€å…³
+                    _T("Time is up!\næ¸¸æˆç»“æŸ!");  // æœ€åä¸€å…³
                 RECT r = { 0, WIN_HEIGHT / 3, WIN_WIDTH, WIN_HEIGHT };
-                drawtext(text, &r, DT_CENTER | DT_VCENTER | DT_WORDBREAK);  // ¾ÓÖĞÏÔÊ¾
+                drawtext(text, &r, DT_CENTER | DT_VCENTER | DT_WORDBREAK);  // å±…ä¸­æ˜¾ç¤º
                 FlushBatchDraw();
                 Sleep(16);
             }
 
-            // ×îºóÒ»¹Ø½áÊø£¬ÅĞ¶¨½á¾Ö
+            // æœ€åä¸€å…³ç»“æŸï¼Œåˆ¤å®šç»“å±€
             if (level == state.MAX_LEVEL) {
-                state.gameOver = 1;  // ±ê¼ÇÓÎÏ·½áÊø
-                mciSendString(_T("play end repeat from 0"), NULL, 0, NULL);  // ²¥·Å½á¾ÖÒôÀÖ
+                state.gameOver = 1;  // æ ‡è®°æ¸¸æˆç»“æŸ
+                mciSendString(_T("play end repeat from 0"), NULL, 0, NULL);  // æ’­æ”¾ç»“å±€éŸ³ä¹
 
-                // ¸ù¾İ·ÖÊıºÍÆÆ»µ¶ÈÅĞ¶¨½á¾Ö
+                // æ ¹æ®åˆ†æ•°å’Œç ´ååº¦åˆ¤å®šç»“å±€
                 const TCHAR* resultText;
                 const TCHAR* desc;
                 IMAGE* endingImg;
 
-                if (state.totalScore < 5000 && state.envDamage < 100) {  // ½á¾Ö1£º¿ª²É²»×ã
+                if (state.totalScore < 5000 && state.envDamage < 100) {  // ç»“å±€1ï¼šå¼€é‡‡ä¸è¶³
                     state.achieve_underdev = true;
                     endingImg = &ending1;
-                    resultText = _T("½á¾Ö1£º²É¼¯²»×ã");
-                    desc = _T("ÇóĞ¡ÊµµÄ×ÊÔ´²É¼¯Á¿Î´´ïµ½¹¤³ÌÒªÇó£¬Äà¿ª½¨Éè½ø¶ÈÖÍºó¡£\n×îÖÕÎ´¸ÏÉÏ¹¤ÆÚ£¬¶şÆÚÈÔÊÇÒ»Æ¬²İÆº£¬Ñ§Ğ£ÅÅÃûÈÕ½¥½µµÍ...\nÌáÊ¾£ºÔÚ²»¹ı¶ÈÆÆ»µ´óºÚÉ½µÄÇé¿öÏÂÓÅÏÈÑ¡Ôñ¸ß¼ÛÖµ¿óÊ¯°É!");
+                    resultText = _T("ç»“å±€1ï¼šé‡‡é›†ä¸è¶³");
+                    desc = _T("æ±‚å°å®çš„èµ„æºé‡‡é›†é‡æœªè¾¾åˆ°å·¥ç¨‹è¦æ±‚ï¼Œæ³¥å¼€å»ºè®¾è¿›åº¦æ»åã€‚\næœ€ç»ˆæœªèµ¶ä¸Šå·¥æœŸï¼ŒäºŒæœŸä»æ˜¯ä¸€ç‰‡è‰åªï¼Œå­¦æ ¡æ’åæ—¥æ¸é™ä½...\næç¤ºï¼šåœ¨ä¸è¿‡åº¦ç ´åå¤§é»‘å±±çš„æƒ…å†µä¸‹ä¼˜å…ˆé€‰æ‹©é«˜ä»·å€¼çŸ¿çŸ³å§!");
                 }
-                else if (state.totalScore >= 5000 && state.envDamage < 100) {  // ½á¾Ö2£ºÍêÃÀ¿ª·¢
+                else if (state.totalScore >= 5000 && state.envDamage < 100) {  // ç»“å±€2ï¼šå®Œç¾å¼€å‘
                     state.achieve_perfectdev = true;
                     endingImg = &ending2;
-                    resultText = _T("½á¾Ö2£ºÍêÃÀ¿ª²É");
-                    desc = _T("ÇóĞ¡ÊµÍêÃÀÆ½ºâÁË¿ª·¢ÓëÉúÌ¬£¬Äà¿ªË³ÀûÀ©½¨¡£\nÑ§Ğ£ÅÅÃûÖ±Éı£¬õÒÉíÖĞ¾Å£¬½£Ö¸C9¡£\nÕâ¾ÍÊÇÄà¿ªÓë´óºÚÉ½¶şÊ®¶àÄêµÄî¿°í°¡£¡");
+                    resultText = _T("ç»“å±€2ï¼šå®Œç¾å¼€é‡‡");
+                    desc = _T("æ±‚å°å®å®Œç¾å¹³è¡¡äº†å¼€å‘ä¸ç”Ÿæ€ï¼Œæ³¥å¼€é¡ºåˆ©æ‰©å»ºã€‚\nå­¦æ ¡æ’åç›´å‡ï¼Œè·»èº«ä¸­ä¹ï¼Œå‰‘æŒ‡C9ã€‚\nè¿™å°±æ˜¯æ³¥å¼€ä¸å¤§é»‘å±±äºŒåå¤šå¹´çš„ç¾ç»Šå•Šï¼");
                 }
-                else {  // ½á¾Ö3£º¿ª·¢¹ı¶È
+                else {  // ç»“å±€3ï¼šå¼€å‘è¿‡åº¦
                     state.achieve_overdev = true;
                     endingImg = &ending3;
-                    resultText = _T("½á¾Ö3£º¿ª·¢¹ı¶È");
-                    desc = _T("ÇóĞ¡Êµ¹ı¶ÈÆÆ»µÉúÌ¬£¬Äà¿ªËäË³ÀûÀ©½¨,µ«»·¾³ÒÑ¾­²»ÊÊÒËÑ§ÉúÉú´æ,×îÖÕÂÙÎª²Ò²»ÈÌ¶ÃµÄ»ÄµØ,Ñ§Ğ£ÅÅÃûÖ±ÏßÏÂ½µ¡£\n¶àÄêÒÔºó£¬µ±ÇóĞ¡ÊµÔÙ´Î»Øµ½Äà¿ª£¬½«»áÏëÆğµ±Äê¿ª·¢´óºÚÉ½µÄÄÇ¸öÏÂÎç...");
+                    resultText = _T("ç»“å±€3ï¼šå¼€å‘è¿‡åº¦");
+                    desc = _T("æ±‚å°å®è¿‡åº¦ç ´åç”Ÿæ€ï¼Œæ³¥å¼€è™½é¡ºåˆ©æ‰©å»º,ä½†ç¯å¢ƒå·²ç»ä¸é€‚å®œå­¦ç”Ÿç”Ÿå­˜,æœ€ç»ˆæ²¦ä¸ºæƒ¨ä¸å¿ç¹çš„è’åœ°,å­¦æ ¡æ’åç›´çº¿ä¸‹é™ã€‚\nå¤šå¹´ä»¥åï¼Œå½“æ±‚å°å®å†æ¬¡å›åˆ°æ³¥å¼€ï¼Œå°†ä¼šæƒ³èµ·å½“å¹´å¼€å‘å¤§é»‘å±±çš„é‚£ä¸ªä¸‹åˆ...");
                 }
 
-                // »æÖÆ½á¾Ö»­Ãæ
+                // ç»˜åˆ¶ç»“å±€ç”»é¢
                 StretchBlt(GetImageHDC(NULL), 0, 0, WIN_WIDTH, WIN_HEIGHT,
                     GetImageHDC(endingImg), 0, 0, endingImg->getwidth(), endingImg->getheight(), SRCCOPY);
 
-                // ÏÔÊ¾½á¾Ö±êÌâ
-                settextstyle(60, 0, _T("Î¢ÈíÑÅºÚ"));
+                // æ˜¾ç¤ºç»“å±€æ ‡é¢˜
+                settextstyle(60, 0, _T("å¾®è½¯é›…é»‘"));
                 settextcolor(RED);
                 SIZE sz;
                 GetTextExtentPoint32(GetImageHDC(), resultText, _tcslen(resultText), &sz);
                 outtextxy((WIN_WIDTH - sz.cx) / 2, WIN_HEIGHT / 4 - 50, resultText);
 
-                // ÏÔÊ¾½á¾ÖÃèÊö
-                settextstyle(40, 0, _T("Î¢ÈíÑÅºÚ"), 0, 0, 700, false, false, false);
+                // æ˜¾ç¤ºç»“å±€æè¿°
+                settextstyle(40, 0, _T("å¾®è½¯é›…é»‘"), 0, 0, 700, false, false, false);
                 settextcolor(RGB(255, 20, 147));
                 RECT descRect = { 150, WIN_HEIGHT / 4 + 25, WIN_WIDTH - 100, WIN_HEIGHT / 2 + 100 };
                 drawtext(desc, &descRect, DT_CENTER | DT_WORDBREAK);
 
-                // »æÖÆ·µ»Ø²Ëµ¥°´Å¥
+                // ç»˜åˆ¶è¿”å›èœå•æŒ‰é’®
                 state.showReturnBtn = true;
                 setfillcolor(RGB(100, 200, 100));
                 fillrectangle(returnBtn.left, returnBtn.top, returnBtn.right, returnBtn.bottom);
-                settextstyle(40, 0, _T("Î¢ÈíÑÅºÚ"));
+                settextstyle(40, 0, _T("å¾®è½¯é›…é»‘"));
                 settextcolor(BLACK);
-                outtextxy(returnBtn.left + 20, returnBtn.top + 10, _T("  ·µ»Ø²Ëµ¥"));
+                outtextxy(returnBtn.left + 20, returnBtn.top + 10, _T("  è¿”å›èœå•"));
                 FlushBatchDraw();
             }
         }
     }
 
     /**
-     * ´¦ÀíÊäÈëÊÂ¼ş
-     * @param msg ÏûÏ¢
-     * ¹¦ÄÜ£ºÏìÓ¦Êó±êºÍ¼üÅÌÊäÈë£¨·¢Éä¹³×Ó¡¢ÊÍ·Å¿óÊ¯¡¢Òı±¬Õ¨µ¯£©
+     * å¤„ç†è¾“å…¥äº‹ä»¶
+     * @param msg æ¶ˆæ¯
+     * åŠŸèƒ½ï¼šå“åº”é¼ æ ‡å’Œé”®ç›˜è¾“å…¥ï¼ˆå‘å°„é’©å­ã€é‡Šæ”¾çŸ¿çŸ³ã€å¼•çˆ†ç‚¸å¼¹ï¼‰
      */
     void Process(const ExMessage& msg) {
         if (msg.message == WM_LBUTTONDOWN && !state.gameOver)
-            hook->Launch();  // ×ó¼ü·¢Éä¹³×Ó
+            hook->Launch();  // å·¦é”®å‘å°„é’©å­
 
         if (msg.message == WM_RBUTTONDOWN && !state.gameOver)
-            hook->Release();  // ÓÒ¼üÊÍ·Å¿óÊ¯
+            hook->Release();  // å³é”®é‡Šæ”¾çŸ¿çŸ³
 
         if (msg.message == WM_KEYDOWN && msg.vkcode == VK_SPACE && !state.gameOver)
-            hook->Explode();  // ¿Õ¸ñÒı±¬Õ¨µ¯
+            hook->Explode();  // ç©ºæ ¼å¼•çˆ†ç‚¸å¼¹
     }
 
     /**
-     * ÅĞ¶Ï¹Ø¿¨ÊÇ·ñ½áÊø
+     * åˆ¤æ–­å…³å¡æ˜¯å¦ç»“æŸ
      */
     bool IsLevelOver() {
         return levelOver;
@@ -1011,8 +1011,8 @@ public:
 };
 
 /**
- * Í³¼Æµ±Ç°½âËøµÄ³É¾ÍÊıÁ¿
- * ¹¦ÄÜ£ºÓÃÓÚÅĞ¶ÏÊÇ·ñ»ñµÃĞÂ³É¾Í£¨ÓëÓÎÏ·Ç°µÄÊıÁ¿¶Ô±È£©
+ * ç»Ÿè®¡å½“å‰è§£é”çš„æˆå°±æ•°é‡
+ * åŠŸèƒ½ï¼šç”¨äºåˆ¤æ–­æ˜¯å¦è·å¾—æ–°æˆå°±ï¼ˆä¸æ¸¸æˆå‰çš„æ•°é‡å¯¹æ¯”ï¼‰
  */
 int GetCurrentAchieveCount() {
     int count = 0;
@@ -1026,28 +1026,25 @@ int GetCurrentAchieveCount() {
     return count;
 }
 
-// È«¾Ö±äÁ¿³õÊ¼»¯
+// å…¨å±€å˜é‡åˆå§‹åŒ–
 vector<IMAGE*> imgs{ &goldImg, &rockImg, &diamondImg, &screwImg, &bombImg, &coalImg, &ironImg };
 Menu menu(&menuBG);
-
-/**
- * Ö÷º¯Êı
- * ¹¦ÄÜ£º³ÌĞòÈë¿Ú£¬³õÊ¼»¯×ÊÔ´¡¢Ö÷Ñ­»·£¨²Ëµ¥ÓëÓÎÏ·ÇĞ»»£©¡¢¹Ø¿¨Á÷³Ì¿ØÖÆ
- */
-int main() {
-    initgraph(WIN_WIDTH, WIN_HEIGHT);  // ³õÊ¼»¯Í¼ĞÎ´°¿Ú
+//åˆå§‹åŒ–èµ„æº
+void resInit()
+{
+    initgraph(WIN_WIDTH, WIN_HEIGHT);  // åˆå§‹åŒ–å›¾å½¢çª—å£
     HWND hWnd = GetHWnd();
-    SetWindowText(hWnd, _T("´óºÚÉ½µÄÓÕ»ó"));  // ÉèÖÃ´°¿Ú±êÌâ
-    BeginBatchDraw();  // ¿ªÊ¼ÅúÁ¿»æÖÆ£¨Ìá¸ßĞ§ÂÊ£©
+    SetWindowText(hWnd, _T("å¤§é»‘å±±çš„è¯±æƒ‘"));  // è®¾ç½®çª—å£æ ‡é¢˜
+    BeginBatchDraw();  // å¼€å§‹æ‰¹é‡ç»˜åˆ¶ï¼ˆæé«˜æ•ˆç‡ï¼‰
 
-    // ´ò¿ª±³¾°ÒôÀÖ×ÊÔ´£¨Ô¤¼ÓÔØ£¬±ÜÃâ²¥·ÅÊ±¿¨¶Ù£©
+    // æ‰“å¼€èƒŒæ™¯éŸ³ä¹èµ„æºï¼ˆé¢„åŠ è½½ï¼Œé¿å…æ’­æ”¾æ—¶å¡é¡¿ï¼‰
     mciSendString(_T("open audio\\main_menu_bgm.mp3 alias menu"), NULL, 0, NULL);
     mciSendString(_T("open audio\\cut_scene.mp3 alias cutscene"), NULL, 0, NULL);
     mciSendString(_T("open audio\\instruction_bgm.mp3 alias instruction"), NULL, 0, NULL);
     mciSendString(_T("open audio\\ending_bgm.mp3 alias end"), NULL, 0, NULL);
     mciSendString(_T("open audio\\mining_bgm.mp3 alias mining"), NULL, 0, NULL);
 
-    // ¼ÓÔØÍ¼Æ¬×ÊÔ´
+    // åŠ è½½å›¾ç‰‡èµ„æº
     loadimage(&cutSceneImg, _T("image\\cut_scene.png"));
     loadimage(&menuBG, _T("image\\main_menu_bg.png"));
     loadimage(&instructionBG, _T("image\\instruction_bg.png"));
@@ -1075,28 +1072,46 @@ int main() {
     loadimage(&achieveBG, _T("image\\achieve_bg.png"));
     loadimage(&lockedImg, _T("image\\locked.png"));
 
-    ExplodeAnimation::LoadResources();  // ¼ÓÔØ±¬Õ¨¶¯»­Ö¡
+    ExplodeAnimation::LoadResources();  // åŠ è½½çˆ†ç‚¸åŠ¨ç”»å¸§
 
     setlinecolor(BLACK);
     setlinestyle(PS_SOLID, 5);
 
-    // Ö÷Ñ­»·
+}
+//é‡Šæ”¾èµ„æº
+void resRelease() {
+    mciSendString(_T("close menu"), NULL, 0, NULL);
+    mciSendString(_T("close cutscene"), NULL, 0, NULL);
+    mciSendString(_T("close instruction"), NULL, 0, NULL);
+    mciSendString(_T("close end"), NULL, 0, NULL);
+    mciSendString(_T("close mining"), NULL, 0, NULL);
+
+    EndBatchDraw();
+    closegraph();
+}
+/**
+ * ä¸»å‡½æ•°
+ * åŠŸèƒ½ï¼šç¨‹åºå…¥å£ï¼Œåˆå§‹åŒ–èµ„æºã€ä¸»å¾ªç¯ï¼ˆèœå•ä¸æ¸¸æˆåˆ‡æ¢ï¼‰ã€å…³å¡æµç¨‹æ§åˆ¶
+ */
+int main() {
+	resInit();  // åˆå§‹åŒ–èµ„æº
+    // ä¸»å¾ªç¯
     while (GameState::Instance().isRunning) {
         ExMessage msg;
         while (peekmessage(&msg)) {
-            if (msg.message == WM_CLOSE) {  // ÓÃ»§µã»÷¹Ø±Õ°´Å¥
-                GameState::Instance().isRunning = false;  // ±ê¼ÇÍË³öÑ­»·
+            if (msg.message == WM_CLOSE) {  // ç”¨æˆ·ç‚¹å‡»å…³é—­æŒ‰é’®
+                GameState::Instance().isRunning = false;  // æ ‡è®°é€€å‡ºå¾ªç¯
                 break;
             }
         }
-        if (!GameState::Instance().isRunning) break;  // ÊÕµ½¹Ø±ÕÊÂ¼ş£¬ÍË³öÑ­»·
-        if (GameState::Instance().isInMenu) {  // ÔÚÖ÷²Ëµ¥
+        if (!GameState::Instance().isRunning) break;  // æ”¶åˆ°å…³é—­äº‹ä»¶ï¼Œé€€å‡ºå¾ªç¯
+        if (GameState::Instance().isInMenu) {  // åœ¨ä¸»èœå•
             int menuResult = menu.Run();
-            if (menuResult == 1) {  // µã»÷¿ªÊ¼ÓÎÏ·
+            if (menuResult == 1) {  // ç‚¹å‡»å¼€å§‹æ¸¸æˆ
                 GameState& state = GameState::Instance();
-                state.lastAchieveCount = GetCurrentAchieveCount();  // ¼ÇÂ¼µ±Ç°³É¾ÍÊı
+                state.lastAchieveCount = GetCurrentAchieveCount();  // è®°å½•å½“å‰æˆå°±æ•°
 
-                // ³õÊ¼»¯ÓÎÏ·×´Ì¬
+                // åˆå§‹åŒ–æ¸¸æˆçŠ¶æ€
                 state.isInMenu = false;
                 state.totalScore = 0;
                 state.envDamage = 0;
@@ -1105,59 +1120,59 @@ int main() {
                 state.showReturnBtn = false;
                 ExMessage msg;
 
-                mciSendString(_T("stop menu"), NULL, 0, NULL);  // Í£Ö¹²Ëµ¥ÒôÀÖ
+                mciSendString(_T("stop menu"), NULL, 0, NULL);  // åœæ­¢èœå•éŸ³ä¹
 
-                // ¹Ø¿¨Á÷³Ì£¨´Ó1µ½MAX_LEVEL£©
+                // å…³å¡æµç¨‹ï¼ˆä»1åˆ°MAX_LEVELï¼‰
                 while (state.currentLevel <= state.MAX_LEVEL) {
-                    ShowCutScene(state.currentLevel);  // ²¥·Å¹ı³¡¶¯»­
-                    mciSendString(_T("play mining repeat from 0"), NULL, 0, NULL);  // ²¥·Å¹Ø¿¨ÒôÀÖ
+                    ShowCutScene(state.currentLevel);  // æ’­æ”¾è¿‡åœºåŠ¨ç”»
+                    mciSendString(_T("play mining repeat from 0"), NULL, 0, NULL);  // æ’­æ”¾å…³å¡éŸ³ä¹
 
-                    // ÉèÖÃµ±Ç°¹Ø¿¨Ê±¼ä£¨Ëæ¹Ø¿¨Ôö¼Ó£©
+                    // è®¾ç½®å½“å‰å…³å¡æ—¶é—´ï¼ˆéšå…³å¡å¢åŠ ï¼‰
                     state.gameTime = 80 - (state.currentLevel - 1) * 10;
-                    MinerGame game(&mineBG, &hookImg, &catchImg, imgs, state.currentLevel);  // ´´½¨¹Ø¿¨
+                    MinerGame game(&mineBG, &hookImg, &catchImg, imgs, state.currentLevel);  // åˆ›å»ºå…³å¡
 
-                    // µ¥¸ö¹Ø¿¨µÄÓÎÏ·Ñ­»·
+                    // å•ä¸ªå…³å¡çš„æ¸¸æˆå¾ªç¯
                     while (!game.IsLevelOver()) {
-                        ULONGLONG t0 = GetTickCount64();  // ¼ÇÂ¼µ±Ç°Ê±¼ä
+                        ULONGLONG t0 = GetTickCount64();  // è®°å½•å½“å‰æ—¶é—´
 
-                        // ´¦ÀíÊäÈë
+                        // å¤„ç†è¾“å…¥
                         while (peekmessage(&msg)) {
                             game.Process(msg);
                         }
 
-                        game.Update();  // ¸üĞÂÓÎÏ·×´Ì¬
-                        game.Draw();    // »æÖÆÓÎÏ·»­Ãæ
-                        FlushBatchDraw();  // Ë¢ĞÂ
+                        game.Update();  // æ›´æ–°æ¸¸æˆçŠ¶æ€
+                        game.Draw();    // ç»˜åˆ¶æ¸¸æˆç”»é¢
+                        FlushBatchDraw();  // åˆ·æ–°
 
-                        // ¿ØÖÆÖ¡ÂÊ£¨Ô¼60Ö¡£©
+                        // æ§åˆ¶å¸§ç‡ï¼ˆçº¦60å¸§ï¼‰
                         ULONGLONG t1 = GetTickCount64();
                         if (t1 - t0 < 1000 / GAME_FRAME)
                             Sleep(1000 / GAME_FRAME - (t1 - t0));
                     }
-                    state.currentLevel++;  // ½øÈëÏÂÒ»¹Ø
+                    state.currentLevel++;  // è¿›å…¥ä¸‹ä¸€å…³
                 }
 
-                // ÓÎÏ·½áÊøºó£¬µÈ´ı·µ»Ø²Ëµ¥
+                // æ¸¸æˆç»“æŸåï¼Œç­‰å¾…è¿”å›èœå•
                 while (!state.isInMenu) {
                     while (peekmessage(&msg)) {
-                        if (msg.message == WM_LBUTTONDOWN) {  // µã»÷·µ»Ø°´Å¥
+                        if (msg.message == WM_LBUTTONDOWN) {  // ç‚¹å‡»è¿”å›æŒ‰é’®
                             int x = msg.x, y = msg.y;
                             if (PtInRect(&returnBtn, { x, y })) {
-                                state.isInMenu = true;  // ·µ»Ø²Ëµ¥
+                                state.isInMenu = true;  // è¿”å›èœå•
                                 break;
                             }
                         }
                     }
                 }
 
-                // ¼ì²éÊÇ·ñ»ñµÃĞÂ³É¾Í
+                // æ£€æŸ¥æ˜¯å¦è·å¾—æ–°æˆå°±
                 state.gotNewAchievement = GetCurrentAchieveCount() > state.lastAchieveCount;
-                // ¸üĞÂ×î¸ß·Ö
+                // æ›´æ–°æœ€é«˜åˆ†
                 if (state.totalScore > state.tempHighScore) {
                     state.tempHighScore = state.totalScore;
                 }
 
-                // ÖØÖÃ×´Ì¬
+                // é‡ç½®çŠ¶æ€
                 mciSendString(_T("stop end"), NULL, 0, NULL);
                 state.currentLevel = 1;
                 state.totalScore = 0;
@@ -1168,14 +1183,6 @@ int main() {
             }
         }
     }
-
-    mciSendString(_T("close menu"), NULL, 0, NULL);
-    mciSendString(_T("close cutscene"), NULL, 0, NULL);
-    mciSendString(_T("close instruction"), NULL, 0, NULL);
-    mciSendString(_T("close end"), NULL, 0, NULL);
-    mciSendString(_T("close mining"), NULL, 0, NULL);
-
-    EndBatchDraw();
-    closegraph();
+    resRelease();//é‡Šæ”¾èµ„æº
     return 0;
 }
