@@ -1,0 +1,41 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "C:\\Users\\rxccccc\\Desktop\\\u8BFE\u5185\u4F5C\u4E1A\\\u9762\u5411\u5BF9\u8C61\\Homework\\The Temptation of Dahei Mountain\\The Temptation of Dahei Mountain\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{DC719B70-B66D-4CD2-AC21-ACE1A5AD0EDB}|The Temptation of Dahei Mountain\\The Temptation of Dahei Mountain.vcxproj|C:\\Users\\rxccccc\\Desktop\\\u8BFE\u5185\u4F5C\u4E1A\\\u9762\u5411\u5BF9\u8C61\\Homework\\The Temptation of Dahei Mountain\\The Temptation of Dahei Mountain\\The Temptation of Dahei Mountain\\main.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{DC719B70-B66D-4CD2-AC21-ACE1A5AD0EDB}|The Temptation of Dahei Mountain\\The Temptation of Dahei Mountain.vcxproj|solutionrelative:The Temptation of Dahei Mountain\\main.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 1,
+          "Children": [
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{3ae79031-e1bc-11d0-8f78-00a0c9110057}"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "main.cpp",
+              "DocumentMoniker": "C:\\Users\\rxccccc\\Desktop\\\u8BFE\u5185\u4F5C\u4E1A\\\u9762\u5411\u5BF9\u8C61\\Homework\\The Temptation of Dahei Mountain\\The Temptation of Dahei Mountain\\The Temptation of Dahei Mountain\\main.cpp",
+              "RelativeDocumentMoniker": "The Temptation of Dahei Mountain\\main.cpp",
+              "ToolTip": "C:\\Users\\rxccccc\\Desktop\\\u8BFE\u5185\u4F5C\u4E1A\\\u9762\u5411\u5BF9\u8C61\\Homework\\The Temptation of Dahei Mountain\\The Temptation of Dahei Mountain\\The Temptation of Dahei Mountain\\main.cpp",
+              "RelativeToolTip": "The Temptation of Dahei Mountain\\main.cpp",
+              "ViewState": "AgIAAA8BAAAAAAAAAAAYwBUBAABKAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
+              "WhenOpened": "2025-07-15T03:19:42.123Z",
+              "EditorCaption": ""
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

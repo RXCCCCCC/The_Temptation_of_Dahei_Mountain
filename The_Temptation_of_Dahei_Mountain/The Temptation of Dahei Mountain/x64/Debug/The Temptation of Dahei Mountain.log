@@ -1,0 +1,6 @@
+﻿  main.cpp
+C:\Users\rxccccc\Desktop\课内作业\面向对象\Homework\The Temptation of Dahei Mountain\The Temptation of Dahei Mountain\The Temptation of Dahei Mountain\main.cpp(127,63): warning C4267: “参数”: 从“size_t”转换到“int”，可能丢失数据
+C:\Users\rxccccc\Desktop\课内作业\面向对象\Homework\The Temptation of Dahei Mountain\The Temptation of Dahei Mountain\The Temptation of Dahei Mountain\main.cpp(355,86): warning C4267: “参数”: 从“size_t”转换到“int”，可能丢失数据
+C:\Users\rxccccc\Desktop\课内作业\面向对象\Homework\The Temptation of Dahei Mountain\The Temptation of Dahei Mountain\The Temptation of Dahei Mountain\main.cpp(968,72): warning C4267: “参数”: 从“size_t”转换到“int”，可能丢失数据
+C:\Users\rxccccc\Desktop\课内作业\面向对象\Homework\The Temptation of Dahei Mountain\The Temptation of Dahei Mountain\The Temptation of Dahei Mountain\main.cpp(1135,53): warning C4244: “参数”: 从“ULONGLONG”转换到“DWORD”，可能丢失数据
+  The Temptation of Dahei Mountain.vcxproj -> C:\Users\rxccccc\Desktop\课内作业\面向对象\Homework\The Temptation of Dahei Mountain\The Temptation of Dahei Mountain\x64\Debug\The Temptation of Dahei Mountain.exe
