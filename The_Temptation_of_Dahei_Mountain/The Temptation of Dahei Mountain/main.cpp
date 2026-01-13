@@ -1127,8 +1127,6 @@ int main() {
                     ShowCutScene(state.currentLevel);  // 播放过场动画
                     mciSendString(_T("play mining repeat from 0"), NULL, 0, NULL);  // 播放关卡音乐
 
-                    // 设置当前关卡时间（随关卡增加）
-                    state.gameTime = 80 - (state.currentLevel - 1) * 10;
                     MinerGame game(&mineBG, &hookImg, &catchImg, imgs, state.currentLevel);  // 创建关卡
 
                     // 单个关卡的游戏循环
